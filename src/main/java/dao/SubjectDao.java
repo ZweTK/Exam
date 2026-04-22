@@ -156,4 +156,36 @@ public class SubjectDao extends DAO {
 
 		return count > 0;
 	}
+
+	/**
+	 * 科目チック
+	 */
+	public Subject get(String cd) throws Exception {
+		// データベース接続取得
+		Connection con = getConnection();
+
+		// subjectテーブルから指定された科目コードを検索
+		PreparedStatement st = con.prepareStatement(
+				"SELECT * FROM subject WHERE cd = ?");
+		st.setString(1, cd);
+
+		// SELECT文なので executeQuery() を使用
+		ResultSet rs = st.executeQuery();
+
+		Subject subject = null;
+
+		// データが存在する場合、Subjectオブジェクトへ格納
+		if (rs.next()) {
+			subject = new Subject();
+			subject.setCd(rs.getString("cd"));
+			subject.setName(rs.getString("name"));
+		}
+
+		// リソース解放
+		rs.close();
+		st.close();
+		con.close();
+
+		return subject;
+	}
 }

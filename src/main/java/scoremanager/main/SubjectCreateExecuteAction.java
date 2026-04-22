@@ -16,6 +16,8 @@ import tool.Action;
  */
 public class SubjectCreateExecuteAction extends Action {
 
+	private Subject String;
+
 	@Override
 	public void execute(
 			HttpServletRequest request,
@@ -35,12 +37,21 @@ public class SubjectCreateExecuteAction extends Action {
 		Map<String, String> errors = new HashMap<>();
 
 		// 入力チェック
+		SubjectDao sbDao = new SubjectDao();
+
+		Subject subjectCheck = sbDao.get(cd);
+
+		// 科目コード未入力チェック
 		if (cd == null || cd.isEmpty()) {
 			errors.put("cd", "科目コードを入力してください。");
-		}
 
-		if (name == null || name.isEmpty()) {
-			errors.put("name", "科目名を入力してください。");
+			// 重複チェック
+		} else if (subjectCheck != null) {
+			errors.put("cd", "科目コードが重複してます。");
+
+			// 3文字チェック
+		} else if (cd.length() != 3) {
+			errors.put("cd", "科目コードは3文字で入力してください。");
 		}
 
 		// エラー時は入力画面へ戻る

@@ -71,11 +71,8 @@
 							   id="subject-name"
 							   name="name"
 							   maxlength="30"
-							   value="${name}" />
-
-						<div class="text-warning mt-1">
-							${errors.get("name")}
-						</div>
+							   value="${name}"
+							   required />
 
 					</div>
 

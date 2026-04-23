@@ -65,21 +65,7 @@ public class TestListSubject implements Serializable {
 	/**
 	 * 点数一覧設定
 	 */
-	public void setPoints(Map<Integer, Integer> points) {
+	public void putPoints(Map<Integer, Integer> points) {
 		this.points = points;
-	}
-
-	/**
-	 * 指定回の点数取得
-	 */
-	public Integer getPoint(int key) {
-		return points.get(key);
-	}
-
-	/**
-	 * 指定回の点数登録
-	 */
-	public void putPoint(int key, int value) {
-		points.put(key, value);
 	}
 }

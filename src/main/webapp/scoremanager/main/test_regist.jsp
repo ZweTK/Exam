@@ -22,11 +22,11 @@
 
 			<%-- 見出し --%>
 			<h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">
-				成績参照
+				成績管理
 			</h2>
 
 			<%-- 検索フォーム --%>
-			<form action="ScoreList.action" method="get">
+			<form action="TestRegist.action" method="get">
 
 				<div class="row border mx-3 mb-3 py-3 align-items-end rounded"
 					 id="filter">
@@ -48,7 +48,7 @@
 							</option>
 
 							<c:forEach var="year"
-								items="${ent_year_set}">
+								items="${entYearSet}">
 
 								<option value="${year}"
 									<c:if test="${year==f1}">
@@ -82,7 +82,7 @@
 							</option>
 
 							<c:forEach var="num"
-								items="${class_num_set}">
+								items="${classList}">
 
 								<option value="${num}"
 									<c:if test="${num==f2}">
@@ -116,7 +116,7 @@
 							</option>
 
 							<c:forEach var="sub"
-								items="${subject_set}">
+								items="${subjectList}">
 
 								<option value="${sub.cd}"
 									<c:if test="${sub.cd==f3}">
@@ -179,7 +179,7 @@
 				</div>
 
 			</form>
-
+			<%--こちらから直す --%>
 			<%-- 検索結果 --%>
 			<c:choose>
 
@@ -196,8 +196,6 @@
 							<th>クラス</th>
 							<th>学生番号</th>
 							<th>氏名</th>
-							<th>科目</th>
-							<th>回数</th>
 							<th>点数</th>
 						</tr>
 
@@ -208,9 +206,7 @@
 								<td>${score.entYear}</td>
 								<td>${score.classNum}</td>
 								<td>${score.studentNo}</td>
-								<td>${score.studentName}</td>
-								<td>${score.subjectName}</td>
-								<td>${score.no}</td>
+								<td>${score.studentName}</td>						
 								<td>${score.point}</td>
 							</tr>
 

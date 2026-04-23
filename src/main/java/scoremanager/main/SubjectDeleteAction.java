@@ -15,15 +15,15 @@ public class SubjectDeleteAction extends Action {
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-    	HttpSession session = request.getSession();
-        Teacher teacher = (Teacher) session.getAttribute("user");
-		
+		HttpSession session = request.getSession();
+		Teacher teacher = (Teacher) session.getAttribute("user");
+
 		// 未ログイン時はログイン画面へ
 		if (teacher == null) {
 			response.sendRedirect("../login.jsp");
 			return;
 		}
-		
+
 		// 科目コード取得
 		String cd = request.getParameter("cd");
 
@@ -32,7 +32,6 @@ public class SubjectDeleteAction extends Action {
 
 		// 科目の詳細データを取得
 		Subject subject = dao.get(cd);
-
 		// JSPへ送る
 		request.setAttribute("subject", subject);
 

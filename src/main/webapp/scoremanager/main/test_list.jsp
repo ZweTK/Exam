@@ -25,166 +25,178 @@
 				成績参照
 			</h2>
 
-			<%-- 検索フォーム --%>
-			<form action="ScoreList.action" method="get">
+			<div class="px-4 mt-3">
 
-				<div class="row border mx-3 mb-3 py-3 align-items-end rounded"
+				<div class="row border mx-3 mb-3 py-3 rounded"
 					 id="filter">
-					 
-					 <div class="col-2">
-					 <p>科目情報</p>
-					 </div>
 
-					<%-- 入学年度 --%>
-					<div class="col-2">
+					<%-- 科目検索フォーム --%>
+					<form action="TestListSubjectExecute.action"
+						  method="get">
 
-						<label class="form-label"
-							   for="score-f1-select">
-							入学年度
-						</label>
+						<div class="row align-items-end">
 
-						<select class="form-select"
-								id="score-f1-select"
-								name="f1">
+							<div class="col-2">
+								<p>科目情報</p>
+							</div>
 
-							<option value="">
-								--------
-							</option>
+							<%-- 入学年度 --%>
+							<div class="col-2">
 
-							<c:forEach var="year"
-								items="${ent_year_set}">
+								<label class="form-label">
+									入学年度
+								</label>
 
-								<option value="${year}"
-									<c:if test="${year==f1}">
-										selected
-									</c:if>>
+								<select class="form-select"
+										name="f1">
 
-									${year}
+									<option value="">
+										--------
+									</option>
 
-								</option>
+									<c:forEach var="year"
+										items="${ent_year_set}">
 
-							</c:forEach>
+										<option value="${year}"
+											<c:if test="${year==f1}">
+												selected
+											</c:if>>
 
-						</select>
+											${year}
 
-					</div>
+										</option>
 
-					<%-- クラス --%>
-					<div class="col-2">
+									</c:forEach>
 
-						<label class="form-label"
-							   for="score-f2-select">
-							クラス
-						</label>
+								</select>
 
-						<select class="form-select"
-								id="score-f2-select"
-								name="f2">
+							</div>
 
-							<option value="">
-								--------
-							</option>
+							<%-- クラス --%>
+							<div class="col-2">
 
-							<c:forEach var="num"
-								items="${class_num_set}">
+								<label class="form-label">
+									クラス
+								</label>
 
-								<option value="${num}"
-									<c:if test="${num==f2}">
-										selected
-									</c:if>>
+								<select class="form-select"
+										name="f2">
 
-									${num}
+									<option value="">
+										--------
+									</option>
 
-								</option>
+									<c:forEach var="num"
+										items="${class_num_set}">
 
-							</c:forEach>
+										<option value="${num}"
+											<c:if test="${num==f2}">
+												selected
+											</c:if>>
 
-						</select>
+											${num}
 
-					</div>
+										</option>
 
-					<%-- 科目 --%>
-					<div class="col-3">
+									</c:forEach>
 
-						<label class="form-label"
-							   for="score-f3-select">
-							科目
-						</label>
+								</select>
 
-						<select class="form-select"
-								id="score-f3-select"
-								name="f3">
+							</div>
 
-							<option value="">
-								--------
-							</option>
+							<%-- 科目 --%>
+							<div class="col-3">
 
-							<c:forEach var="sub"
-								items="${subject_set}">
+								<label class="form-label">
+									科目
+								</label>
 
-								<option value="${sub.cd}"
-									<c:if test="${sub.cd==f3}">
-										selected
-									</c:if>>
+								<select class="form-select"
+										name="f3">
 
-									${sub.name}
+									<option value="">
+										--------
+									</option>
 
-								</option>
+									<c:forEach var="sub"
+										items="${subject_set}">
 
-							</c:forEach>
+										<option value="${sub.cd}"
+											<c:if test="${sub.cd==f3}">
+												selected
+											</c:if>>
 
-						</select>
+											${sub.name}
 
-					</div>
+										</option>
 
-					<%-- 科目検索ボタン --%>
-					<div class="col-2 text-center">
+									</c:forEach>
 
-						<button class="btn btn-secondary w-100">
-							検索
-						</button>
+								</select>
 
-					</div>
-					
+							</div>
+
+							<%-- 検索ボタン --%>
+							<div class="col-2 text-center">
+
+								<button class="btn btn-secondary w-100">
+									検索
+								</button>
+
+							</div>
+
+						</div>
+
+					</form>
+
 					<div class="w-100 border-top my-3"></div>
-					
-					<div class="col-2">
-					 <p>学生情報</p>
-					 </div>
 
-					<%-- 学生番号 --%>
-					<div class="col-4">
+					<%-- 学生検索フォーム --%>
+					<form action="TestListStudentExecute.action"
+						  method="get">
 
-						<label class="form-label"
-							   for="score-f4-select">
-							学生番号
-						</label>
+						<div class="row align-items-end">
 
-						<input name="no"
-							   type="text"
-							   value=""
-							   class="form-control border-1">
+							<div class="col-2">
+								<p>学生情報</p>
+							</div>
 
-						</select>
+							<%-- 学生番号 --%>
+							<div class="col-4">
 
-					</div>
-					
-					<%-- 学生検索ボタン --%>
-					<div class="col-2 text-center">
+								<label class="form-label">
+									学生番号
+								</label>
 
-						<button class="btn btn-secondary w-100">
-							検索
-						</button>
+								<input name="no"
+									   type="text"
+									   value=""
+									   class="form-control border-1"
+									   required
+									   placeholder="学生番号を入力してください">
 
-					</div>
-					
-					
+							</div>
+
+							<%-- 検索ボタン --%>
+							<div class="col-2 text-center">
+
+								<button class="btn btn-secondary w-100">
+									検索
+								</button>
+
+							</div>
+
+						</div>
+
+					</form>
 
 				</div>
-				
-				<p>科目情報を選択または学生情報を入力して検索ボタンをクリックしてください</p>
 
-			</form>
+				<p>
+					科目情報を選択または学生情報を入力して検索ボタンをクリックしてください
+				</p>
+
+			</div>
 
 		</section>
 

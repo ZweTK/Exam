@@ -162,7 +162,7 @@
 
 						<input name="no"
 							   type="text"
-							   value=""
+							   value="${student.no}"
 							   class="form-control border-1">
 						
 
@@ -180,12 +180,44 @@
 					
 
 				</div>
-				
-				<p>科目情報を選択または学生情報を入力して検索ボタンをクリックしてください</p>
-
 			</form>
 
+		</section>
 
-	</c:param>
+			<div class="px-4 mt-3">
+
+				<%-- 学生氏名表示 --%>
+				<div class="mb-3">
+					氏名：${student.name}(${student.no})
+				</div>
+
+				<%-- 成績一覧 --%>
+				<table class="table table-hover mx-3">
+
+					<tr>
+						<th>科目名</th>
+						<th>科目コード</th>
+						<th>回数</th>
+						<th>点数</th>
+					</tr>
+
+					<c:forEach var="row" items="${testList}">
+
+						<tr>
+							<td>${row.subject_name}</td>
+							<td>${row.subject_cd}</td>
+							<td>${row.num}</td>
+							<td>${row.point}</td>
+						</tr>
+
+					</c:forEach>
+
+				</table>
+
+			</div>
+
+		</section>	</c:param>
+
+
 
 </c:import>

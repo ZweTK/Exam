@@ -163,7 +163,9 @@
 						<input name="no"
 							   type="text"
 							   value=""
-							   class="form-control border-1">
+							   class="form-control border-1"
+							   required
+							   placeholder="学生番号を入力してください">
 
 					</div>
 					

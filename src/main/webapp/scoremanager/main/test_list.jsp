@@ -153,37 +153,15 @@
 					 </div>
 
 					<%-- 学生番号 --%>
-					<div class="col-4">
+					<div class="col-5">
 
 						<label class="form-label"
 							   for="score-f4-select">
 							学生番号
 						</label>
 
-						<select class="form-select"
-								id="score-f4-select"
-								name="f4">
-
-							<option value="">
-								--------
-							</option>
-
-							<c:forEach var="year"
-								items="${ent_year_set}">
-
-								<option value="${year}"
-									<c:if test="${year==f1}">
-										selected
-									</c:if>>
-
-									${year}
-
-								</option>
-
-							</c:forEach>
-
-						</select>
-
+						<input type="text" class="form-control" id="score-f4-input" name="f4" maxlength="10"
+						placeholder="学生番号を入力してください" value="${f4}">
 					</div>
 					
 					<%-- 学生検索ボタン --%>

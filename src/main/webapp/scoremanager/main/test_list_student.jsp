@@ -164,6 +164,7 @@
 							   type="text"
 							   value=""
 							   class="form-control border-1">
+						
 
 					</div>
 					
@@ -175,12 +176,15 @@
 						</button>
 
 					</div>
+					
+					
 
 				</div>
+				
+				<p>科目情報を選択または学生情報を入力して検索ボタンをクリックしてください</p>
 
 			</form>
 
-		</section>
 
 	</c:param>
 

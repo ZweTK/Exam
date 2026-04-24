@@ -16,21 +16,8 @@ import bean.Test;
  */
 public class TestDao extends DAO {
 
-	/** ベースSQL */
-	private String baseSql = "select t.student_no, t.class_num, t.subject_cd, t.school_cd, t.no, t.point,"
-			+ " s.name as student_name, s.ent_year, s.is_attend,"
-			+ " sub.name as subject_name "
-			+ "from test t "
-			+ "join student s on t.student_no = s.no "
-			+ "join subject sub on t.subject_cd = sub.cd "
-			+ "where t.school_cd = ? ";
-
 	/**
-	 * ResultSetからTestリストを生成
-	 * @param rs ResultSet
-	 * @param school 学校情報
-	 * @return Testリスト
-	 * @throws Exception
+	 * ResultSet → List<Test>
 	 */
 	private List<Test> postFilter(ResultSet rs, School school) throws Exception {
 
@@ -38,13 +25,11 @@ public class TestDao extends DAO {
 
 		while (rs.next()) {
 
-			Test test = new Test();
-
 			Student student = new Student();
 			student.setNo(rs.getString("student_no"));
 			student.setName(rs.getString("student_name"));
 			student.setEntYear(rs.getInt("ent_year"));
-			student.setAttend(rs.getBoolean("is_attend"));
+			student.setClassNum(rs.getString("class_num"));
 			student.setSchool(school);
 
 			Subject subject = new Subject();
@@ -52,11 +37,12 @@ public class TestDao extends DAO {
 			subject.setName(rs.getString("subject_name"));
 			subject.setSchool_cd(school.getCd());
 
+			Test test = new Test();
 			test.setStudent(student);
 			test.setClassNum(rs.getString("class_num"));
 			test.setSubject(subject);
 			test.setSchool(school);
-			test.setNo(rs.getInt("no"));
+			test.setNo(rs.getInt("test_no"));
 			test.setPoint(rs.getInt("point"));
 
 			list.add(test);
@@ -66,14 +52,7 @@ public class TestDao extends DAO {
 	}
 
 	/**
-	 * 指定条件で検索
-	 * @param entYear 入学年度
-	 * @param classNum クラス番号
-	 * @param subject 科目
-	 * @param num 回数
-	 * @param school 学校
-	 * @return テスト一覧
-	 * @throws Exception
+	 * 検索
 	 */
 	public List<Test> filter(
 			int entYear,
@@ -86,25 +65,52 @@ public class TestDao extends DAO {
 
 		Connection con = getConnection();
 
-		String sql = baseSql
-				+ " and s.ent_year = ?"
-				+ " and t.class_num = ?"
-				+ " and t.subject_cd = ?"
-				+ " and t.no = ?"
-				+ " order by t.student_no";
+		String sql = "SELECT " +
+				" s.ent_year, " +
+				" s.class_num, " +
+				" s.no AS student_no, " +
+				" s.name AS student_name, " +
+				" sub.cd AS subject_cd, " +
+				" sub.name AS subject_name, " +
+				" t.no AS test_no, " +
+				" t.point " +
+
+				"FROM student s " +
+
+				"CROSS JOIN ( " +
+				" SELECT cd, name " +
+				" FROM subject " +
+				" WHERE school_cd = ? " +
+				") sub " +
+
+				"LEFT JOIN test t " +
+				" ON t.student_no = s.no " +
+				" AND t.class_num = s.class_num " +
+				" AND t.subject_cd = sub.cd " +
+				" AND t.school_cd = s.school_cd " +
+				" AND t.no = ? " +
+
+				"WHERE s.school_cd = ? " +
+				"AND s.ent_year = ? " +
+				"AND s.class_num = ? " +
+				"AND sub.cd = ? " +
+
+				"ORDER BY s.no";
 
 		PreparedStatement st = con.prepareStatement(sql);
 
 		st.setString(1, school.getCd());
-		st.setInt(2, entYear);
-		st.setString(3, classNum);
-		st.setString(4, subject.getCd());
-		st.setInt(5, num);
+		st.setInt(2, num);
+		st.setString(3, school.getCd());
+		st.setInt(4, entYear);
+		st.setString(5, classNum);
+		st.setString(6, subject.getCd());
 
 		ResultSet rs = st.executeQuery();
 
 		list = postFilter(rs, school);
 
+		rs.close();
 		st.close();
 		con.close();
 
@@ -112,59 +118,14 @@ public class TestDao extends DAO {
 	}
 
 	/**
-	 * 1件取得
-	 * @param student 学生
-	 * @param subject 科目
-	 * @param school 学校
-	 * @param no 回数
-	 * @return Test
-	 * @throws Exception
-	 */
-	public Test get(
-			Student student,
-			Subject subject,
-			School school,
-			int no) throws Exception {
-
-		Connection con = getConnection();
-
-		String sql = baseSql
-				+ " and t.student_no = ?"
-				+ " and t.subject_cd = ?"
-				+ " and t.no = ?";
-
-		PreparedStatement st = con.prepareStatement(sql);
-
-		st.setString(1, school.getCd());
-		st.setString(2, student.getNo());
-		st.setString(3, subject.getCd());
-		st.setInt(4, no);
-
-		ResultSet rs = st.executeQuery();
-
-		List<Test> list = postFilter(rs, school);
-
-		st.close();
-		con.close();
-
-		if (list.size() > 0) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * 登録・更新
-	 * @param test Test
-	 * @param con Connection
-	 * @return 成功:true
-	 * @throws Exception
+	 * 登録
 	 */
 	public boolean save(Test test, Connection con) throws Exception {
 
-		String sql = "merge into test key(student_no, subject_cd, school_cd, no) "
-				+ "values(?, ?, ?, ?, ?, ?)";
+		String sql = "MERGE INTO test " +
+				"(student_no, subject_cd, school_cd, no, class_num, point) " +
+				"KEY(student_no, subject_cd, school_cd, no) " +
+				"VALUES (?, ?, ?, ?, ?, ?)";
 
 		PreparedStatement st = con.prepareStatement(sql);
 
@@ -183,10 +144,7 @@ public class TestDao extends DAO {
 	}
 
 	/**
-	 * 複数件登録・更新
-	 * @param list Testリスト
-	 * @return 成功:true
-	 * @throws Exception
+	 * 複数登録
 	 */
 	public boolean save(List<Test> list) throws Exception {
 
@@ -195,6 +153,7 @@ public class TestDao extends DAO {
 		boolean result = true;
 
 		try {
+
 			con.setAutoCommit(false);
 
 			for (Test test : list) {

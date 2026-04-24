@@ -137,7 +137,7 @@
 
 					</div>
 
-					<%-- 検索ボタン --%>
+					<%-- 科目検索ボタン --%>
 					<div class="col-2 text-center">
 
 						<button class="btn btn-secondary w-100">
@@ -145,6 +145,8 @@
 						</button>
 
 					</div>
+					
+					<div class="w-100 border-top my-3"></div>
 					
 					<div class="col-2">
 					 <p>学生情報</p>
@@ -184,7 +186,7 @@
 
 					</div>
 					
-					<%-- 検索ボタン --%>
+					<%-- 学生検索ボタン --%>
 					<div class="col-2 text-center">
 
 						<button class="btn btn-secondary w-100">

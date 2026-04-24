@@ -160,27 +160,10 @@
 							学生番号
 						</label>
 
-						<select class="form-select"
-								id="score-f4-select"
-								name="f4">
-
-							<option value="">
-								--------
-							</option>
-
-							<c:forEach var="year"
-								items="${ent_year_set}">
-
-								<option value="${year}"
-									<c:if test="${year==f1}">
-										selected
-									</c:if>>
-
-									${year}
-
-								</option>
-
-							</c:forEach>
+						<input name="no"
+							   type="text"
+							   value=""
+							   class="form-control border-1">
 
 						</select>
 

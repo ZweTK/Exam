@@ -163,12 +163,6 @@
 
 						<input type="text" class="form-control" id="score-f4-input" name="f4" maxlength="10"
 						placeholder="学生番号を入力してください" value="${f4}">
-						<input name="no"
-							   type="text"
-							   value=""
-							   class="form-control border-1">
-
-						</select>
 
 					</div>
 					

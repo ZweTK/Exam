@@ -1,3 +1,4 @@
+// TestRegistAction.java
 package scoremanager.main;
 
 import java.time.LocalDate;
@@ -6,53 +7,81 @@ import java.util.List;
 
 import bean.Subject;
 import bean.Teacher;
+import bean.Test;
 import dao.ClassNumDao;
 import dao.SubjectDao;
+import dao.TestDao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import tool.Action;
 
-/**
- * 成績登録画面表示Action
- */
 public class TestRegistAction extends Action {
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse res)
 			throws Exception {
 
-		// セッションからログインユーザー取得
 		Teacher teacher = (Teacher) req.getSession().getAttribute("user");
 
-		// DAO生成
 		ClassNumDao cDao = new ClassNumDao();
 		SubjectDao sDao = new SubjectDao();
+		TestDao tDao = new TestDao();
 
-		// クラス一覧取得
-		List<String> classList = cDao.filter(teacher.getSchool());
-
-		// 科目一覧取得
-		List<Subject> subjectList = sDao.filter(teacher.getSchool());
-
-		// 現在年取得
 		int year = LocalDate.now().getYear();
 
-		/*
-		 * 入学年度一覧作成
-		 * 現在年から10年前～今年まで
-		 */
 		List<Integer> entYearSet = new ArrayList<>();
-
 		for (int i = year - 10; i <= year; i++) {
 			entYearSet.add(i);
 		}
 
-		// JSPへセット
-		req.setAttribute("classList", classList);
-		req.setAttribute("subjectList", subjectList);
-		req.setAttribute("entYearSet", entYearSet);
+		List<Integer> noSet = new ArrayList<>();
+		for (int i = 1; i <= 10; i++) {
+			noSet.add(i);
+		}
 
-		// 画面表示
+		req.setAttribute("entYearSet", entYearSet);
+		req.setAttribute("noSet", noSet);
+		req.setAttribute("classList", cDao.filter(teacher.getSchool()));
+		req.setAttribute("subjectList", sDao.filter(teacher.getSchool()));
+
+		String entYearStr = req.getParameter("entYear");
+		String classNum = req.getParameter("classNum");
+		String subjectCd = req.getParameter("subjectCd");
+		String noStr = req.getParameter("no");
+
+		if (entYearStr != null &&
+			classNum != null &&
+			subjectCd != null &&
+			noStr != null &&
+			!entYearStr.equals("0") &&
+			!classNum.equals("0") &&
+			!subjectCd.equals("0") &&
+			!noStr.equals("0")) {
+
+			int entYear = Integer.parseInt(entYearStr);
+			int no = Integer.parseInt(noStr);
+
+			Subject subject = sDao.get(subjectCd, teacher.getSchool());
+
+			List<Test> tests = tDao.filter(
+				entYear,
+				classNum,
+				subject,
+				no,
+				teacher.getSchool());
+
+			req.setAttribute("tests", tests);
+			req.setAttribute("entYear", entYear);
+			req.setAttribute("classNum", classNum);
+			req.setAttribute("subjectCd", subjectCd);
+			req.setAttribute("subjectName", subject.getName());
+			req.setAttribute("no", no);
+
+		} else if (entYearStr != null) {
+			req.setAttribute("error",
+				"入学年度・クラス・科目・回数を選択してください");
+		}
+
 		req.getRequestDispatcher("test_regist.jsp").forward(req, res);
 	}
 }

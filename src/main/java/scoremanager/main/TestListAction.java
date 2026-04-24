@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import tool.Action;
 
 public class TestListAction extends Action{
-	public void executte(HttpServletRequest req, HttpServletResponse res)throws Exception {
+	public void execute(HttpServletRequest req, HttpServletResponse res)throws Exception {
 		//セッションからユーザーデーターを取得
 		HttpSession session = req.getSession();
 		

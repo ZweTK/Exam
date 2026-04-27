@@ -162,10 +162,9 @@
 
 						<input name="no"
 							   type="text"
-							   value=""
-							   class="form-control border-1"
-							   required
-							   placeholder="学生番号を入力してください">
+							   value="${student.no}"
+							   class="form-control border-1">
+						
 
 					</div>
 					
@@ -177,13 +176,53 @@
 						</button>
 
 					</div>
+					
+					
 
 				</div>
-
 			</form>
 
 		</section>
 
-	</c:param>
+			<div class="px-4 mt-3">
+
+				<%-- 学生氏名表示 --%>
+				<div class="mb-3">
+					科目：${subject.name}
+				</div>
+
+				<%-- 成績一覧 --%>
+				<table class="table table-hover mx-3">
+
+					<tr>
+						<th>入学年度</th>
+						<th>クラス</th>
+						<th>学生番号</th>
+						<th>氏名</th>
+						<th>1回</th>
+						<th>２回</th>
+					</tr>
+
+
+					<c:forEach var="row" items="${testList}">
+
+						<tr>
+							<td>${row.entYear}</td>
+							<td>${row.classNum}</td>
+							<td>${row.studentNo}</td>
+							<td>${row.studentName}</td>
+							<td>${row.point1}</td>
+							<td>${row.point2}</td>
+						</tr>
+
+					</c:forEach>
+
+				</table>
+
+			</div>
+
+		</section>	</c:param>
+
+
 
 </c:import>

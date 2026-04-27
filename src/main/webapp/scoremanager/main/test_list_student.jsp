@@ -204,8 +204,8 @@
 					<c:forEach var="row" items="${testList}">
 
 						<tr>
-							<td>${row.subject_name}</td>
-							<td>${row.subject_cd}</td>
+							<td>${row.subjectName}</td>
+							<td>${row.subjectCD}</td>
 							<td>${row.num}</td>
 							<td>${row.point}</td>
 						</tr>

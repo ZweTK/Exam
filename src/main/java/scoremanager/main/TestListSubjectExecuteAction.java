@@ -26,6 +26,8 @@ public class TestListSubjectExecuteAction extends Action {
 		//ログイン中の先生情報取得
 		Teacher teacher = (Teacher)session.getAttribute("user");
 		
+		
+		
 		//検索情報初期化
 		String entYearStr = "";
 		String classNum = "";
@@ -67,26 +69,36 @@ public class TestListSubjectExecuteAction extends Action {
 		subjectList = sDao.filter(teacher.getSchool());
 		//クラス変換
 		classNumList = cDao.filter(teacher.getSchool());
+		
 
 		
 		//リクエストパラメーター
 		entYearStr = req.getParameter("f1");
 		classNum = req.getParameter("f2");
 		subjectStr = req.getParameter("f3");
+		System.out.println("入学年度"+entYearStr);
+		System.out.println("クラス"+classNum);
+		System.out.println("科目"+subjectStr);
+		
+		
+		
+
 
 		//入力チェック
 		if (entYearStr != null &&
 				classNum != null &&
 				subjectStr != null &&
-				entYearStr.equals("0") &&
-				classNum.equals("0") &&
-				subjectStr.equals("0")) {
+				!entYearStr.equals("0") &&
+				!classNum.equals("0") &&
+				!subjectStr.equals("0")) {
 			
 
 			//入学年度変換
 			entYear = Integer.parseInt(entYearStr);
 			//科目変換
 			subject.setCd(subjectStr);
+			
+			subject = sDao.get(subjectStr);
 			
 			test = tDao.filter(
 					entYear,
@@ -110,9 +122,9 @@ public class TestListSubjectExecuteAction extends Action {
 		req.setAttribute("f3", subject);
 		
 		//jspへ返す
-		req.setAttribute("entYearSet", entYearSet);
-		req.setAttribute("classNumList", classNumList);
-		req.setAttribute("subjectList", subjectList);
+		req.setAttribute("ent_year_set", entYearSet);
+		req.setAttribute("class_num_set", classNumList);
+		req.setAttribute("subject_set", subjectList);
 		req.setAttribute("testList", test);
 
 

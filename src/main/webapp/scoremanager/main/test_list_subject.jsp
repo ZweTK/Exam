@@ -26,7 +26,7 @@
 			</h2>
 
 			<%-- 検索フォーム --%>
-			<form action="ScoreList.action" method="get">
+			<form action="TestListSubjectExecute.action" method="get">
 
 				<div class="row border mx-3 mb-3 py-3 align-items-end rounded"
 					 id="filter">
@@ -102,6 +102,7 @@
 						</select>
 
 					</div>
+					
 
 					<%-- 科目 --%>
 					<div class="col-3">
@@ -123,7 +124,7 @@
 								items="${subject_set}">
 
 								<option value="${sub.cd}"
-									<c:if test="${sub.cd==f3}">
+									<c:if test="${sub.cd==f3.cd}">
 										selected
 									</c:if>>
 
@@ -146,7 +147,16 @@
 
 					</div>
 					
+					<c:forEach var="error" items="${errors}">
+									<p>${error.value}</p>
+					</c:forEach>
+					
 					<div class="w-100 border-top my-3"></div>
+					
+					
+				<%--学生情報検索フォーム --%>
+				<form action="TestListStudentExecute.action"
+						  method="get">
 					
 					<div class="col-2">
 					 <p>学生情報</p>
@@ -188,7 +198,7 @@
 
 				<%-- 科目名表示 --%>
 				<div class="mb-3">
-					科目：${subject.name}
+					科目：${f3.name}
 				</div>
 
 				<%-- 成績一覧 --%>

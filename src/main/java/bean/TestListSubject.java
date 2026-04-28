@@ -10,6 +10,7 @@ public class TestListSubject implements Serializable {
 
 	private int entYear; // 入学年度
 	private String studentNo; // 学生番号
+	private String studentName;
 	private String classNum; // クラス番号
 	private Map<Integer, Integer> points; // 回数ごとの点数
 
@@ -67,5 +68,13 @@ public class TestListSubject implements Serializable {
 	 */
 	public void putPoints(Map<Integer, Integer> points) {
 		this.points = points;
+	}
+
+	public String getStudentName() {
+		return studentName;
+	}
+
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
 	}
 }

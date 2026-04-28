@@ -18,120 +18,153 @@ import jakarta.servlet.http.HttpSession;
 import tool.Action;
 
 public class TestListSubjectExecuteAction extends Action {
-	public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception{
-		
-		//セッション取得
+
+	@Override
+	public void execute(
+			HttpServletRequest req,
+			HttpServletResponse res) throws Exception {
+
+		// セッション取得
 		HttpSession session = req.getSession();
-		
-		//ログイン中の先生情報取得
-		Teacher teacher = (Teacher)session.getAttribute("user");
-		
-		
-		
-		//検索情報初期化
-		String entYearStr = "";
-		String classNum = "";
-		String subjectStr = "";
-		
-		Subject	subject = new Subject();
+
+		// ログイン先生情報
+		Teacher teacher = (Teacher) session.getAttribute("user");
+
+		// パラメータ取得
+		String entYearStr = req.getParameter("f1");
+
+		String classNum = req.getParameter("f2");
+
+		String subjectCd = req.getParameter("f3");
+
 		int entYear = 0;
-		
-		//科目別成績一覧一覧
-		List<TestListSubject> test = null;
-		
-		//科目一覧
+
+		Subject subject = new Subject();
+
+		List<TestListSubject> testList = null;
+
 		List<Subject> subjectList = null;
-		
-		//クラス一覧
+
 		List<String> classNumList = null;
-		
-		//現在時刻取得
-		LocalDate todayDate = LocalDate.now();
-		int year = todayDate.getYear();
-		
-		/* 入学年度リスト作成（今年から10年前まで） */
+
+		Map<String, String> errors = new HashMap<>();
+
+		// 入学年度一覧
+		int year = LocalDate.now().getYear();
+
 		List<Integer> entYearSet = new ArrayList<>();
 
 		for (int i = year - 10; i <= year; i++) {
+
 			entYearSet.add(i);
 		}
-		
-		//Dao生成
-		TestListSubjectDao tDao = new TestListSubjectDao();
+
+		// DAO
 		SubjectDao sDao = new SubjectDao();
+
 		ClassNumDao cDao = new ClassNumDao();
-		
-		
-		//エラーーメッセージ
-		Map<String, String> errors = new HashMap<>();
 
-		//科目変換
-		subjectList = sDao.filter(teacher.getSchool());
-		//クラス変換
-		classNumList = cDao.filter(teacher.getSchool());
-		
+		TestListSubjectDao tDao = new TestListSubjectDao();
 
-		
-		//リクエストパラメーター
-		entYearStr = req.getParameter("f1");
-		classNum = req.getParameter("f2");
-		subjectStr = req.getParameter("f3");
-		System.out.println("入学年度"+entYearStr);
-		System.out.println("クラス"+classNum);
-		System.out.println("科目"+subjectStr);
-		
-		
-		
+		// 初期データ
+		subjectList = sDao.filter(
+				teacher.getSchool());
 
+		classNumList = cDao.filter(
+				teacher.getSchool());
 
-		//入力チェック
+		// 入力チェック
 		if (entYearStr != null &&
 				classNum != null &&
-				subjectStr != null &&
-				!entYearStr.equals("0") &&
-				!classNum.equals("0") &&
-				!subjectStr.equals("0")) {
-			
+				subjectCd != null &&
+				!entYearStr.isEmpty() &&
+				!classNum.isEmpty() &&
+				!subjectCd.isEmpty()) {
 
-			//入学年度変換
-			entYear = Integer.parseInt(entYearStr);
-			//科目変換
-			subject.setCd(subjectStr);
-			
-			subject = sDao.get(subjectStr);
-			
-			test = tDao.filter(
+			entYear = Integer.parseInt(
+					entYearStr);
+
+			subject = sDao.get(subjectCd);
+
+			testList = tDao.filter(
 					entYear,
 					classNum,
 					subject,
-					teacher.getSchool()
-					) ;
-			
-		}else {
-			errors.put("f", "入学年度とクラスと科目を選択してください");
-			req.setAttribute("errors", errors);
+					teacher.getSchool());
+
+			if (testList == null ||
+					testList.isEmpty()) {
+
+				errors.put(
+						"f",
+						"成績情報がありません。");
+			}
+
+		} else {
+
+			errors.put(
+					"f",
+					"入学年度・クラス・科目を選択してください。");
 		}
-		if (test != null) {
-			errors.put("f", "学生情報が存在しませんでした");
-			req.setAttribute("errors", errors);
+
+		// 最大回数取得
+		int maxNo = 0;
+
+		if (testList != null) {
+
+			for (TestListSubject row : testList) {
+
+				for (Integer key : row.getPoints()
+						.keySet()) {
+
+					if (key > maxNo) {
+						maxNo = key;
+					}
+				}
+			}
 		}
-		
-		//画面保持値
-		req.setAttribute("f1", entYear);
-		req.setAttribute("f2", classNum);
-		req.setAttribute("f3", subject);
-		
-		//jspへ返す
-		req.setAttribute("ent_year_set", entYearSet);
-		req.setAttribute("class_num_set", classNumList);
-		req.setAttribute("subject_set", subjectList);
-		req.setAttribute("testList", test);
 
+		// 画面保持値
+		req.setAttribute(
+				"f1",
+				entYear);
 
-		
+		req.setAttribute(
+				"f2",
+				classNum);
 
-		/* JSP表示 */
-		req.getRequestDispatcher("test_list_subject.jsp")
+		req.setAttribute(
+				"f3",
+				subject);
+
+		// JSPへ渡す
+		req.setAttribute(
+				"ent_year_set",
+				entYearSet);
+
+		req.setAttribute(
+				"class_num_set",
+				classNumList);
+
+		req.setAttribute(
+				"subject_set",
+				subjectList);
+
+		req.setAttribute(
+				"testList",
+				testList);
+
+		req.setAttribute(
+				"errors",
+				errors);
+
+		req.setAttribute(
+				"maxNo",
+				maxNo);
+
+		// JSP表示
+		req.getRequestDispatcher(
+				"test_list_subject.jsp")
 				.forward(req, res);
 	}
 }

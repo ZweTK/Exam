@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import tool.Action;
 
-public class TestListSubjectExecute extends Action {
+public class TestListSubjectExecuteAction extends Action {
 	public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception{
 		
 		//セッション取得
@@ -77,10 +77,10 @@ public class TestListSubjectExecute extends Action {
 		//入力チェック
 		if (entYearStr != null &&
 				classNum != null &&
-				subject != null &&
+				subjectStr != null &&
 				entYearStr.equals("0") &&
 				classNum.equals("0") &&
-				subject.equals("0")) {
+				subjectStr.equals("0")) {
 			
 
 			//入学年度変換
@@ -110,25 +110,10 @@ public class TestListSubjectExecute extends Action {
 		req.setAttribute("f3", subject);
 		
 		//jspへ返す
-		req.setAttribute("", entYearSet);
-		req.setAttribute("", classNumList);
-		req.setAttribute("", subjectList);
-		req.setAttribute("", test);
-
-			
-//		/* forwardされた値があれば優先 */
-//		if (entYearObj != null) {
-//			entYearStr = entYearObj.toString();
-//		}
-//		if (classNumObj != null) {
-//			classNum = classNumObj.toString();
-//		}
-//		if (subjectCdObj != null) {
-//			subjectCd = subjectCdObj.toString();
-//		}
-//		if (noObj != null) {
-//			noStr = noObj.toString();
-//		}
+		req.setAttribute("entYearSet", entYearSet);
+		req.setAttribute("classNumList", classNumList);
+		req.setAttribute("subjectList", subjectList);
+		req.setAttribute("testList", test);
 
 
 		

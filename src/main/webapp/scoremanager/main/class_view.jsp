@@ -20,7 +20,7 @@
             <table class="table table-bordered">
 
                 <tr>
-                    <th>番号</th>
+                    <th>学生番号</th>
                     <th>氏名</th>
                     <th>入学年度</th>
                     <th>在学</th>

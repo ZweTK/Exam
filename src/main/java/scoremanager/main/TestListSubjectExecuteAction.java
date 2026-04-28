@@ -123,4 +123,3 @@ public class TestListSubjectExecuteAction extends Action {
 				.forward(req, res);
 	}
 }
-//エラーメッセージの時の処理　private subject型nullかどうか

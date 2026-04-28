@@ -273,4 +273,47 @@ public class StudentDao extends DAO {
 
 		return count > 0;
 	}
+
+	public List<Student> getClass(String class_num, School school) throws Exception {
+
+		// 戻り値用リスト
+		List<Student> list = new ArrayList<Student>();
+
+		// DB接続
+		Connection con = getConnection();
+
+		// SQL作成
+		PreparedStatement st = con.prepareStatement(
+				"select * from student " +
+						"where class_num=? and school_cd=?");
+
+		// パラメータ設定
+		st.setString(1, class_num);
+		st.setString(2, school.getCd());
+
+		// SQL実行
+		ResultSet rs = st.executeQuery();
+
+		// 結果をリストへ格納
+		while (rs.next()) {
+
+			Student student = new Student();
+
+			student.setNo(rs.getString("no"));
+			student.setName(rs.getString("name"));
+			student.setClassNum(rs.getString("class_num"));
+			student.setEntYear(rs.getInt("ent_year"));
+			student.setAttend(rs.getBoolean("is_attend"));
+
+			list.add(student);
+		}
+
+		// クローズ
+		rs.close();
+		st.close();
+		con.close();
+
+		// リスト返却
+		return list;
+	}
 }

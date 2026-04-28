@@ -1,96 +1,121 @@
+// CsvUploadAction.java
 package scoremanager.main;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import bean.School;
 import bean.Student;
-import dao.StudentDao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import tool.Action;
 
-/*
- * CSVファイルをアップロードし、
- * 学生情報をデータベースへ登録するアクションクラス
- */
+// CSVファイルを読み込み、確認画面へ送るActionクラス
 public class CsvUploadAction extends Action {
 
 	@Override
 	public void execute(
 			HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+			HttpServletResponse response)
+			throws Exception {
 
 		try {
 
-			// アップロードされたCSVファイル取得
+			// アップロードされたCSVファイルを取得
 			Part filePart = request.getPart("csvfile");
 
-			// UTF-8で読み込み
+			// CSVファイルをUTF-8で読み込む
 			BufferedReader br = new BufferedReader(
 					new InputStreamReader(
-							filePart.getInputStream(), "UTF-8"));
+							filePart.getInputStream(),
+							"UTF-8"));
+
+			// Studentオブジェクトを格納するリスト
+			List<Student> list = new ArrayList<Student>();
 
 			String line;
 
-			// StudentDAO生成
-			StudentDao dao = new StudentDao();
-
-			// 1行ずつ読み込む
+			// 1行ずつCSVデータを読み込む
 			while ((line = br.readLine()) != null) {
 
 				// カンマ区切りで分割
 				String[] data = line.split(",");
 
-				// 項目数不足ならスキップ
+				// データ数不足なら読み飛ばす
 				if (data.length < 6) {
 					continue;
 				}
 
 				// Studentオブジェクト作成
-				Student p = new Student();
+				Student student = new Student();
 
-				// CSVデータをセット
-				p.setNo(data[0]); // 学生番号
-				p.setName(data[1]); // 氏名
-				p.setEntYear(
-						Integer.parseInt(data[2])); // 入学年度
-				p.setClassNum(data[3]); // クラス番号
+				// 学生番号
+				student.setNo(data[0].trim());
 
-				// 在学フラグ文字列 → boolean変換
-				p.setAttend(
-						Boolean.parseBoolean(data[4]));
+				// 学生名
+				student.setName(data[1].trim());
 
-				// 学校情報セット
+				// 入学年度
+				student.setEntYear(
+						Integer.parseInt(
+								data[2].trim()));
+
+				// クラス番号
+				student.setClassNum(
+						data[3].trim());
+
+				// 在学フラグ（true / false）
+				student.setAttend(
+						Boolean.parseBoolean(
+								data[4].trim()));
+
+				// 学校情報作成
 				School school = new School();
-				school.setCd(data[5]);
 
-				p.setSchool(school);
+				// 学校コード設定
+				school.setCd(
+						data[5].trim());
 
-				// DB保存
-				dao.save(p);
+				// StudentにSchool情報セット
+				student.setSchool(
+						school);
+
+				// リストへ追加
+				list.add(student);
 			}
 
-			// 読み込み終了
+			// BufferedReaderを閉じる
 			br.close();
 
-			// 成功メッセージ
-			request.setAttribute(
-					"msg",
-					"CSV Upload Success");
+			// セッションに確認用データ保存
+			request.getSession()
+					.setAttribute(
+							"previewList",
+							list);
+
+			// 確認画面へ遷移
+			request.getRequestDispatcher(
+					"CsvUploadConfirm.jsp")
+					.forward(
+							request,
+							response);
 
 		} catch (Exception e) {
 
-			// エラーメッセージ
+			// エラー時メッセージ設定
 			request.setAttribute(
 					"msg",
-					"Error : " + e.getMessage());
-		}
+					"CSV読込失敗");
 
-		// 結果画面へ遷移
-		request.getRequestDispatcher(
-				"Upload-out.jsp")
-				.forward(request, response);
+			// エラー画面へ遷移
+			request.getRequestDispatcher(
+					"Upload-out.jsp")
+					.forward(
+							request,
+							response);
+		}
 	}
 }

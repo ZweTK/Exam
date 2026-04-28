@@ -49,6 +49,7 @@
 						<tr>
 							<th>クラス番号</th>
 							<th></th>
+							<th></th>
 						</tr>
 
 						<%-- 繰り返し表示 --%>
@@ -62,6 +63,12 @@
 								<td>
 									<a href="ClassUpdate.action?class_num=${classNum}">
 										変更
+									</a>
+								</td>
+								<%--ビュー --%>
+								<td>
+									<a href="ClassView.action?class_num=${classNum}">
+										ビュー
 									</a>
 								</td>
 

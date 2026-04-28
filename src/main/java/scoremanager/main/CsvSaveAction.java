@@ -1,6 +1,7 @@
 // CsvSaveAction.java
 package scoremanager.main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import bean.Student;
@@ -20,90 +21,86 @@ public class CsvSaveAction extends Action {
 
 		try {
 
-			// セッションからプレビュー用の学生リストを取得
+			// セッションからCSVプレビューリスト取得
 			@SuppressWarnings("unchecked")
 			List<Student> list = (List<Student>) req
 					.getSession()
-					.getAttribute(
-							"previewList");
+					.getAttribute("previewList");
 
-			// データが存在しない場合
-			if (list == null ||
-					list.isEmpty()) {
+			// データなし
+			if (list == null || list.isEmpty()) {
 
-				// エラーメッセージ設定
 				req.setAttribute(
 						"msg",
 						"登録データがありません");
 
-				// 結果画面へ移動
 				req.getRequestDispatcher(
 						"Upload-out.jsp")
-						.forward(
-								req,
-								res);
+						.forward(req, res);
 				return;
 			}
 
-			// Studentテーブル操作用DAO作成
+			// DAO生成
 			StudentDao dao = new StudentDao();
 
-			// リスト内の学生データを1件ずつ保存
+			// 重複学生番号保存用
+			List<String> duplicateNos = new ArrayList<String>();
+
+			// 先に全部チェックする
 			for (Student s : list) {
 
-				// 学生番号が既に存在するか確認
-				if (dao.get(
-						s.getNo()) != null) {
-
-					// 重複している場合はエラーメッセージ表示
-					req.setAttribute(
-							"msg",
-							"学生番号 "
-									+ s.getNo()
-									+ " は既に登録されています");
-
-					req.getRequestDispatcher(
-							"Upload-out.jsp")
-							.forward(
-									req,
-									res);
-					return;
+				// DBに既に存在するなら追加
+				if (dao.get(s.getNo()) != null) {
+					duplicateNos.add(
+							s.getNo());
 				}
+			}
 
-				// DBへ学生情報を保存
+			// 重複が1件でもあれば保存しない
+			if (!duplicateNos.isEmpty()) {
+
+				String msg = "登録している番号 : "
+						+ String.join(
+								", ",
+								duplicateNos);
+
+				req.setAttribute(
+						"msg",
+						msg);
+
+				req.getRequestDispatcher(
+						"Upload-out.jsp")
+						.forward(req, res);
+				return;
+			}
+
+			// 重複なし → 全件保存
+			for (Student s : list) {
 				dao.save(s);
 			}
 
-			// 保存完了後、セッションのプレビューリスト削除
+			// セッション削除
 			req.getSession()
 					.removeAttribute(
 							"previewList");
 
-			// 成功メッセージ設定
 			req.setAttribute(
 					"msg",
 					"登録完了しました。");
 
-			// 完了画面へ移動
 			req.getRequestDispatcher(
 					"Upload-out.jsp")
-					.forward(
-							req,
-							res);
+					.forward(req, res);
 
 		} catch (Exception e) {
 
-			// エラー発生時のメッセージ
 			req.setAttribute(
 					"msg",
 					"CSV登録失敗");
 
-			// エラー画面へ移動
 			req.getRequestDispatcher(
 					"Upload-out.jsp")
-					.forward(
-							req,
-							res);
+					.forward(req, res);
 		}
 	}
 }

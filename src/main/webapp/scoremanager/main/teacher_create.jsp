@@ -22,62 +22,86 @@
 
             <%-- 画面タイトル --%>
             <h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">
-                科目情報登録
+                先生情報登録
             </h2>
 
             <%-- 登録フォーム開始 --%>
-            <form action="SubjectCreateExecute.action" method="post">
+            <form action="TeacherCreateExecute.action" method="post">
 
                 <div class="row mx-2 mb-3 py-4">
 
-                    <%-- 科目コード入力欄 --%>
+                    <%-- ID入力欄 --%>
                     <div class="col-md-12 mb-3">
-
-                        <label class="form-label">
-                            科目コード
-                        </label>
+                        <text class="form-label">ID</text>
 
                         <input type="text"
-                               name="cd"
-                               value="${cd}"
+                               name="ID"
                                class="form-control"
-                               placeholder="科目コードを入力してください">
-
-                        <%-- エラー表示 --%>
-                        <div class="text-warning mt-1">
-                            ${errors.get("cd")}
-                        </div>
-
+                               placeholder="IDを入力してください"
+                               required>
                     </div>
 
-                    <%-- 科目名入力欄 --%>
+                    <%-- パスワード入力欄 --%>
                     <div class="col-md-12 mb-3">
+                        <text class="form-label">Password</text>
 
-                        <label class="form-label">
-                            科目名
-                        </label>
+                        <input type="password"
+                               name="password"
+                               class="form-control"
+                               placeholder="Passwordを入力してください"
+                               required>
+                    </div>
+
+                    <%-- 氏名入力欄 --%>
+                    <div class="col-md-12 mb-3">
+                        <text class="form-label">氏名</text>
 
                         <input type="text"
                                name="name"
                                value="${name}"
                                class="form-control"
-                               placeholder="科目名を入力してください"
-                               required>
+                               placeholder="氏名を入力してください"
+                               required">
+                    </div>
 
-                        <%-- エラー表示 --%>
-                        <div class="text-warning mt-1">
-                            ${errors.get("name")}
-                        </div>
+                    <%-- 学校コード選択欄 --%>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">学校コード</label>
 
+                        <select name="school_cd" class="form-select">
+
+                            <%-- 初期表示用空欄 --%>
+                            <option value="0">--------</option>
+
+                            <%-- 学校コード一覧を繰り返し表示 --%>
+                            <c:forEach var="school" items="${school_num_set}">
+                                <option value="${school}">
+                                    ${school}
+                                </option>
+                            </c:forEach>
+
+                        </select>
+                    </div>
+
+                    <%-- 管理者権限チェックボックス --%>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox"
+                               name="isManage"
+                               value="t"
+                               class="form-check-input"
+                               id="isManage"
+                               default="false">
+
+                        <label class="form-check-label" for="isManage">
+                            Manage
+                        </label>
                     </div>
 
                     <%-- 登録ボタン --%>
                     <div class="col-12 mt-3">
-
                         <button class="btn btn-secondary">
                             登録して終了
                         </button>
-
                     </div>
 
                 </div>
@@ -86,9 +110,7 @@
 
             <%-- 戻るリンク --%>
             <div class="mx-4">
-                <a href="SubjectList.action">
-                    戻る
-                </a>
+                <a href="StudentList.action">戻る</a>
             </div>
 
         </section>

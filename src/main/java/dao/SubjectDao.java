@@ -64,7 +64,7 @@ public class SubjectDao extends DAO {
 	 * @param school 学校情報
 	 * @return Subject
 	 */
-	public Subject get(String cd, School school) throws Exception {
+	public Subject getSchool(String cd, School school) throws Exception {
 
 		Subject subject = null;
 

@@ -98,7 +98,7 @@ public class TestRegistAction extends Action {
 			int no = Integer.parseInt(noStr);
 
 			/* 科目取得 */
-			Subject subject = sDao.get(subjectCd, teacher.getSchool());
+			Subject subject = sDao.getSchool(subjectCd, teacher.getSchool());
 
 			/* 学生一覧取得 */
 			List<Test> tests = tDao.filter(

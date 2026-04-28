@@ -43,7 +43,7 @@ public class TestRegistExecuteAction extends Action {
 		int count = Integer.parseInt(req.getParameter("count"));
 
 		/* 科目情報取得 */
-		Subject subject = sDao.get(subjectCd, school);
+		Subject subject = sDao.getSchool(subjectCd, school);
 
 		/* 保存用リスト */
 		List<Test> saveList = new ArrayList<>();

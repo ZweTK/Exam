@@ -39,7 +39,7 @@ public class SubjectCreateExecuteAction extends Action {
 		// 入力チェック
 		SubjectDao sbDao = new SubjectDao();
 
-		Subject subjectCheck = sbDao.get(cd);
+		Subject subjectCheck = sbDao.getSchool(cd, teacher.getSchool());
 
 		// 科目コード未入力チェック
 		if (cd == null || cd.isEmpty()) {

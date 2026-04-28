@@ -33,7 +33,7 @@ public class SubjectUpdateExecuteAction extends Action {
 		SubjectDao dao = new SubjectDao();
 
 		// 学校情報付きで科目取得
-		Subject subjectCheck = dao.get(cd, teacher.getSchool());
+		Subject subjectCheck = dao.getSchool(cd, teacher.getSchool());
 
 		// 科目存在チェック
 		if (subjectCheck == null) {

@@ -186,7 +186,7 @@
 
 			<div class="px-4 mt-3">
 
-				<%-- 学生氏名表示 --%>
+				<%-- 科目名表示 --%>
 				<div class="mb-3">
 					科目：${subject.name}
 				</div>
@@ -211,8 +211,8 @@
 							<td>${row.classNum}</td>
 							<td>${row.studentNo}</td>
 							<td>${row.studentName}</td>
-							<td>${row.point1}</td>
-							<td>${row.point2}</td>
+							<td>${row.points[1]}</td>
+							<td>${row.points[2]}</td>
 						</tr>
 
 					</c:forEach>

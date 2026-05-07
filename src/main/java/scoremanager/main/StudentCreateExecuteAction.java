@@ -32,11 +32,8 @@ public class StudentCreateExecuteAction extends Action {
 
 		// 入力値取得
 		String entYearStr = request.getParameter("ent_year");
-
 		String classNum = request.getParameter("class_num");
-
 		String no = request.getParameter("no");
-
 		String name = request.getParameter("name");
 
 		// 現在年取得
@@ -52,19 +49,18 @@ public class StudentCreateExecuteAction extends Action {
 
 		// クラス一覧取得
 		ClassNumDao cDao = new ClassNumDao();
-
 		List<String> classList = cDao.filter(teacher.getSchool());
 
 		// エラーフラグ
 		boolean hasError = false;
 
+		// 入学年度
 		int entYear = 0;
 
 		/*
 		 * 入学年度チェック
 		 */
-		if (entYearStr == null ||
-				entYearStr.equals("0")) {
+		if (entYearStr == null || entYearStr.equals("0")) {
 
 			request.setAttribute(
 					"entYearError",
@@ -73,7 +69,20 @@ public class StudentCreateExecuteAction extends Action {
 			hasError = true;
 
 		} else {
+
 			entYear = Integer.parseInt(entYearStr);
+		}
+
+		/*
+		 * クラスチェック
+		 */
+		if (classNum == null || classNum.isEmpty()) {
+
+			request.setAttribute(
+					"classNumError",
+					"クラスを選択してください");
+
+			hasError = true;
 		}
 
 		/*
@@ -82,8 +91,8 @@ public class StudentCreateExecuteAction extends Action {
 		if (name == null || name.isEmpty()) {
 
 			request.setAttribute(
-					"noError",
-					"このフィールド入力してください");
+					"nameError",
+					"氏名を入力してください");
 
 			hasError = true;
 		}
@@ -93,26 +102,27 @@ public class StudentCreateExecuteAction extends Action {
 		 */
 		StudentDao sDao = new StudentDao();
 
-		Student studentCheck = sDao.get(no);
-
 		if (no == null || no.isEmpty()) {
 
 			request.setAttribute(
 					"noError",
-					"このフィールド入力してください");
-
-			hasError = true;
-
-		} else if (studentCheck != null) {
-
-			request.setAttribute(
-					"noError",
-					"学生番号が重複してます。");
+					"学生番号を入力してください");
 
 			hasError = true;
 
 		} else {
-			hasError = false;
+
+			// 重複チェック
+			Student studentCheck = sDao.get(no);
+
+			if (studentCheck != null) {
+
+				request.setAttribute(
+						"noError",
+						"学生番号が重複しています");
+
+				hasError = true;
+			}
 		}
 
 		/*
@@ -120,6 +130,7 @@ public class StudentCreateExecuteAction extends Action {
 		 */
 		if (hasError) {
 
+			// 再表示用データ設定
 			request.setAttribute(
 					"ent_year_set",
 					entYearSet);
@@ -128,11 +139,13 @@ public class StudentCreateExecuteAction extends Action {
 					"class_num_set",
 					classList);
 
+			// 入力値保持
 			request.setAttribute("f1", entYearStr);
 			request.setAttribute("class_num", classNum);
 			request.setAttribute("no", no);
 			request.setAttribute("name", name);
 
+			// 入力画面へ戻る
 			request.getRequestDispatcher(
 					"student_create.jsp")
 					.forward(request, response);
@@ -152,11 +165,15 @@ public class StudentCreateExecuteAction extends Action {
 		student.setAttend(true);
 		student.setSchool(teacher.getSchool());
 
-		// DB保存
+		/*
+		 * DB保存
+		 */
 		StudentDao dao = new StudentDao();
 		dao.save(student);
 
-		// 完了画面へ
+		/*
+		 * 完了画面へ
+		 */
 		request.getRequestDispatcher(
 				"student_create_done.jsp")
 				.forward(request, response);

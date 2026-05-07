@@ -206,7 +206,7 @@
 										<%-- 該当学生だけエラー表示 --%>
 										<c:if test="${not empty errorMap[row.student.no]}">
 
-											<div class="text-danger mt-1">
+											<div class="text-warning mt-1">
 												${errorMap[row.student.no]}
 											</div>
 

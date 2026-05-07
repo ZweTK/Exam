@@ -26,10 +26,11 @@
 				<!-- ========================= -->
 				<!-- FILTER BOX -->
 				<!-- ========================= -->
-				<div class="row border mx-3 mb-3 py-3 rounded" id="filter">
+				<div class="row border mx-3 mb-3 py-3 rounded"
+					 id="filter">
 
 					<!-- ========================= -->
-					<!-- 科目検索フォーム -->
+					<!-- 科目検索 -->
 					<!-- ========================= -->
 					<form action="TestListSubjectExecute.action"
 						  method="get">
@@ -43,17 +44,29 @@
 							<!-- 入学年度 -->
 							<div class="col-2">
 
-								<label class="form-label">入学年度</label>
+								<label class="form-label">
+									入学年度
+								</label>
 
-								<select class="form-select" name="f1">
+								<select class="form-select"
+										name="f1">
 
-									<option value="">--------</option>
+									<option value="">
+										--------
+									</option>
 
-									<c:forEach var="year" items="${ent_year_set}">
+									<c:forEach var="year"
+											   items="${ent_year_set}">
+
 										<option value="${year}"
-											<c:if test="${year==f1}">selected</c:if>>
+											<c:if test="${year==f1}">
+												selected
+											</c:if>>
+
 											${year}
+
 										</option>
+
 									</c:forEach>
 
 								</select>
@@ -63,17 +76,29 @@
 							<!-- クラス -->
 							<div class="col-2">
 
-								<label class="form-label">クラス</label>
+								<label class="form-label">
+									クラス
+								</label>
 
-								<select class="form-select" name="f2">
+								<select class="form-select"
+										name="f2">
 
-									<option value="">--------</option>
+									<option value="">
+										--------
+									</option>
 
-									<c:forEach var="num" items="${class_num_set}">
+									<c:forEach var="num"
+											   items="${class_num_set}">
+
 										<option value="${num}"
-											<c:if test="${num==f2}">selected</c:if>>
+											<c:if test="${num==f2}">
+												selected
+											</c:if>>
+
 											${num}
+
 										</option>
+
 									</c:forEach>
 
 								</select>
@@ -83,28 +108,42 @@
 							<!-- 科目 -->
 							<div class="col-3">
 
-								<label class="form-label">科目</label>
+								<label class="form-label">
+									科目
+								</label>
 
-								<select class="form-select" name="f3">
+								<select class="form-select"
+										name="f3">
 
-									<option value="">--------</option>
+									<option value="">
+										--------
+									</option>
 
-									<c:forEach var="sub" items="${subject_set}">
+									<c:forEach var="sub"
+											   items="${subject_set}">
+
 										<option value="${sub.cd}"
-											<c:if test="${sub.cd==f3}">selected</c:if>>
+											<c:if test="${sub.cd==f3.cd}">
+												selected
+											</c:if>>
+
 											${sub.name}
+
 										</option>
+
 									</c:forEach>
 
 								</select>
 
 							</div>
 
-							<!-- 検索ボタン -->
+							<!-- 検索 -->
 							<div class="col-2 text-center">
 
 								<button class="btn btn-secondary w-100">
+
 									検索
+
 								</button>
 
 							</div>
@@ -113,11 +152,28 @@
 
 					</form>
 
+					<!-- エラー -->
+					<c:forEach var="error"
+							   items="${errors}">
+
+						<div class="px-4 mt-2 small">
+
+							<span style="color:#d6a100;
+										 font-weight:bold;">
+
+								⚠ ${error.value}
+
+							</span>
+
+						</div>
+
+					</c:forEach>
+
 					<!-- divider -->
 					<div class="w-100 border-top my-3"></div>
 
 					<!-- ========================= -->
-					<!-- 学生検索フォーム -->
+					<!-- 学生検索 -->
 					<!-- ========================= -->
 					<form action="TestListStudentExecute.action"
 						  method="get">
@@ -128,10 +184,11 @@
 								<p>学生情報</p>
 							</div>
 
-							<!-- 学生番号 -->
 							<div class="col-4">
 
-								<label class="form-label">学生番号</label>
+								<label class="form-label">
+									学生番号
+								</label>
 
 								<input name="no"
 									   type="text"
@@ -142,11 +199,12 @@
 
 							</div>
 
-							<!-- 検索ボタン -->
 							<div class="col-2 text-center">
 
 								<button class="btn btn-secondary w-100">
+
 									検索
+
 								</button>
 
 							</div>
@@ -156,60 +214,86 @@
 					</form>
 
 				</div>
-
-				<!-- help text -->
-				<p style="color: #00a1e9;">
-					科目情報を選択または学生情報を入力して検索ボタンをクリックしてください
-				</p>
-
 			</div>
+			<c:if test="${empty testList  && empty errors}">
+			
+				<div class="px-4 mt-3">
+			
+					<p class="small fw-bold">
+			
+						学生情報が存在しませんでした
+			
+					</p>
+			
+				</div>
+			
+			</c:if>
+			<!-- ========================= -->
+			<!-- データ存在時のみ表示 -->
+			<!-- ========================= -->
+			<c:if test="${not empty testList}">
 
-			<!-- エラーメッセージ -->
-			<c:forEach var="error" items="${errors}">
-				<p class="text-danger px-4">
-					${error.value}
-				</p>
-			</c:forEach>
+				<!-- 科目名 -->
+				<div class="px-4 mt-3 mb-2">
 
-			<!-- 科目名 -->
-			<div class="px-4 mt-3 mb-2">
-				科目：${f3.name}
-			</div>
+					科目：${f3.name}
 
-			<!-- 成績テーブル -->
-			<table class="table table-hover mx-3">
+				</div>
 
-				<tr>
-					<th>入学年度</th>
-					<th>クラス</th>
-					<th>学生番号</th>
-					<th>氏名</th>
-
-					<c:forEach var="i" begin="1" end="${maxNo}">
-						<th>${i}回</th>
-					</c:forEach>
-
-				</tr>
-
-				<c:forEach var="row" items="${testList}">
+				<!-- テーブル -->
+				<table class="table table-hover mx-3">
 
 					<tr>
-						<td>${row.entYear}</td>
-						<td>${row.classNum}</td>
-						<td>${row.studentNo}</td>
-						<td>${row.studentName}</td>
 
-						<c:forEach var="i" begin="1" end="${maxNo}">
-							<td>
-								${empty row.points[i] ? "" : row.points[i]}
-							</td>
+						<th>入学年度</th>
+						<th>クラス</th>
+						<th>学生番号</th>
+						<th>氏名</th>
+
+						<c:forEach var="i"
+								   begin="1"
+								   end="${maxNo}">
+
+							<th>${i}回</th>
+
 						</c:forEach>
 
 					</tr>
-					
-				</c:forEach>
 
-			</table>
+					<c:forEach var="row"
+							   items="${testList}">
+
+						<tr>
+
+							<td>${row.entYear}</td>
+
+							<td>${row.classNum}</td>
+
+							<td>${row.studentNo}</td>
+
+							<td>${row.studentName}</td>
+
+							<c:forEach var="i"
+									   begin="1"
+									   end="${maxNo}">
+
+								<td>
+
+									${empty row.points[i]
+										? ""
+										: row.points[i]}
+
+								</td>
+
+							</c:forEach>
+
+						</tr>
+
+					</c:forEach>
+
+				</table>
+
+			</c:if>
 
 		</section>
 

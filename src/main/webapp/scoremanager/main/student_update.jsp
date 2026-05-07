@@ -110,26 +110,25 @@
 					</div>
 
 					<%-- 在学中チェック --%>
-					<div class="mb-3 form-check">
-
-						<input type="checkbox"
-							   name="isAttend"
-							   value="t"
-							   class="form-check-input"
-							   id="isAttend"
-
-							   <c:if test="${student.isAttend()}">
-								   checked
-							   </c:if> />
-
-						<label class="form-check-label"
+					<div class="mb-3 d-flex align-items-center gap-2">
+					
+						<label class="form-label mb-0"
 							   for="isAttend">
-
+					
 							在学中
 						</label>
-
+					
+						<input type="checkbox"
+							   name="isAttend"
+							   value="true"
+							   class="form-check-input mt-0"
+							   id="isAttend"
+					
+							   <c:if test="${isAttend == true || student.isAttend()}">
+								   checked
+							   </c:if> />
+					
 					</div>
-
 					<%-- 更新ボタン --%>
 					<div class="col-12 mt-3">
 

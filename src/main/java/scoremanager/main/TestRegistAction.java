@@ -16,7 +16,6 @@ import tool.Action;
 
 /**
  * 成績登録画面表示Action
- * 検索条件を受け取り、学生一覧を表示する
  */
 public class TestRegistAction extends Action {
 
@@ -24,66 +23,94 @@ public class TestRegistAction extends Action {
 	public void execute(HttpServletRequest req, HttpServletResponse res)
 			throws Exception {
 
-		/* ログイン中の先生情報取得 */
-		Teacher teacher = (Teacher) req.getSession().getAttribute("user");
+		/* ログイン中先生取得 */
+		Teacher teacher = (Teacher) req.getSession()
+				.getAttribute("user");
 
-		/* DAO生成 */
+		/* DAO */
 		ClassNumDao cDao = new ClassNumDao();
 		SubjectDao sDao = new SubjectDao();
 		TestDao tDao = new TestDao();
 
-		/* 現在年取得 */
+		/* 年取得 */
 		int year = LocalDate.now().getYear();
 
-		/* 入学年度リスト作成（今年から10年前まで） */
+		/* 入学年度リスト */
 		List<Integer> entYearSet = new ArrayList<>();
 
 		for (int i = year - 10; i <= year; i++) {
+
 			entYearSet.add(i);
 		}
 
-		/* 回数リスト作成（1～10回） */
+		/* 回数リスト */
 		List<Integer> noSet = new ArrayList<>();
 
 		for (int i = 1; i <= 10; i++) {
+
 			noSet.add(i);
 		}
 
-		/* JSPへ渡す共通データ */
-		req.setAttribute("entYearSet", entYearSet);
-		req.setAttribute("noSet", noSet);
-		req.setAttribute("classList",
-				cDao.filter(teacher.getSchool()));
-		req.setAttribute("subjectList",
-				sDao.filter(teacher.getSchool()));
+		/* 共通データ */
+		req.setAttribute(
+				"entYearSet",
+				entYearSet);
 
-		/* 画面から受け取る検索条件 */
+		req.setAttribute(
+				"noSet",
+				noSet);
+
+		req.setAttribute(
+				"classList",
+				cDao.filter(
+						teacher.getSchool()));
+
+		req.setAttribute(
+				"subjectList",
+				sDao.filter(
+						teacher.getSchool()));
+
+		/* 検索条件取得 */
 		String entYearStr = req.getParameter("entYear");
+
 		String classNum = req.getParameter("classNum");
+
 		String subjectCd = req.getParameter("subjectCd");
+
 		String noStr = req.getParameter("no");
 
-		/* forward時に渡された値も取得 */
-		Object entYearObj = req.getAttribute("entYear");
-		Object classNumObj = req.getAttribute("classNum");
-		Object subjectCdObj = req.getAttribute("subjectCd");
-		Object noObj = req.getAttribute("no");
-
-		/* forwardされた値があれば優先 */
-		if (entYearObj != null) {
-			entYearStr = entYearObj.toString();
-		}
-		if (classNumObj != null) {
-			classNum = classNumObj.toString();
-		}
-		if (subjectCdObj != null) {
-			subjectCd = subjectCdObj.toString();
-		}
-		if (noObj != null) {
-			noStr = noObj.toString();
+		/* forward値優先 */
+		if (req.getAttribute("entYear") != null) {
+			entYearStr = req.getAttribute("entYear")
+					.toString();
 		}
 
-		/* すべて選択されている場合 */
+		if (req.getAttribute("classNum") != null) {
+			classNum = req.getAttribute("classNum")
+					.toString();
+		}
+
+		if (req.getAttribute("subjectCd") != null) {
+			subjectCd = req.getAttribute("subjectCd")
+					.toString();
+		}
+
+		if (req.getAttribute("no") != null) {
+			noStr = req.getAttribute("no")
+					.toString();
+		}
+
+		/* testsが既にある場合 */
+		if (req.getAttribute("tests") != null) {
+
+			req.getRequestDispatcher(
+					"test_regist.jsp")
+					.forward(req, res);
+
+			return;
+		}
+
+		/* 全選択時 */
 		if (entYearStr != null &&
 				classNum != null &&
 				subjectCd != null &&
@@ -93,14 +120,16 @@ public class TestRegistAction extends Action {
 				!subjectCd.equals("0") &&
 				!noStr.equals("0")) {
 
-			/* 数値変換 */
 			int entYear = Integer.parseInt(entYearStr);
+
 			int no = Integer.parseInt(noStr);
 
-			/* 科目取得 */
-			Subject subject = sDao.getSchool(subjectCd, teacher.getSchool());
+			/* 科目 */
+			Subject subject = sDao.getSchool(
+					subjectCd,
+					teacher.getSchool());
 
-			/* 学生一覧取得 */
+			/* 学生一覧 */
 			List<Test> tests = tDao.filter(
 					entYear,
 					classNum,
@@ -108,17 +137,33 @@ public class TestRegistAction extends Action {
 					no,
 					teacher.getSchool());
 
-			/* JSPへ渡す */
-			req.setAttribute("tests", tests);
-			req.setAttribute("entYear", entYear);
-			req.setAttribute("classNum", classNum);
-			req.setAttribute("subjectCd", subjectCd);
-			req.setAttribute("subjectName",
+			/* JSPへ */
+			req.setAttribute(
+					"tests",
+					tests);
+
+			req.setAttribute(
+					"entYear",
+					entYear);
+
+			req.setAttribute(
+					"classNum",
+					classNum);
+
+			req.setAttribute(
+					"subjectCd",
+					subjectCd);
+
+			req.setAttribute(
+					"subjectName",
 					subject.getName());
-			req.setAttribute("no", no);
+
+			req.setAttribute(
+					"no",
+					no);
 
 		}
-		/* 未選択の場合 */
+		/* 未選択 */
 		else if (entYearStr != null) {
 
 			req.setAttribute(
@@ -126,8 +171,9 @@ public class TestRegistAction extends Action {
 					"入学年度・クラス・科目・回数を選択してください");
 		}
 
-		/* JSP表示 */
-		req.getRequestDispatcher("test_regist.jsp")
+		/* JSP */
+		req.getRequestDispatcher(
+				"test_regist.jsp")
 				.forward(req, res);
 	}
 }

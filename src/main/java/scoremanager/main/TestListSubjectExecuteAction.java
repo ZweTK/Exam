@@ -91,20 +91,11 @@ public class TestListSubjectExecuteAction extends Action {
 					classNum,
 					subject,
 					teacher.getSchool());
-
-			if (testList == null ||
-					testList.isEmpty()) {
-
-				errors.put(
-						"f",
-						"成績情報がありません。");
-			}
-
 		} else {
 
 			errors.put(
 					"f",
-					"入学年度・クラス・科目を選択してください。");
+					"入学年度とクラスと科目を選択してください。");
 		}
 
 		// 最大回数取得

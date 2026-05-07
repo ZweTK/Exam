@@ -1,12 +1,10 @@
 package scoremanager.main;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import bean.School;
-import bean.Student;
 import bean.Subject;
 import bean.Teacher;
 import bean.Test;
@@ -18,105 +16,157 @@ import tool.Action;
 
 /**
  * 成績登録実行Action
- * 入力された点数をチェックし、問題なければ保存する
  */
 public class TestRegistExecuteAction extends Action {
 
 	@Override
-	public void execute(HttpServletRequest req, HttpServletResponse res)
+	public void execute(
+			HttpServletRequest req,
+			HttpServletResponse res)
 			throws Exception {
 
-		/* ログイン中の先生情報取得 */
-		Teacher teacher = (Teacher) req.getSession().getAttribute("user");
+		/* ログイン中先生取得 */
+		Teacher teacher = (Teacher) req.getSession()
+				.getAttribute("user");
 
-		/* 学校情報取得 */
+		/* 学校 */
 		School school = teacher.getSchool();
 
-		/* DAO生成 */
+		/* DAO */
 		SubjectDao sDao = new SubjectDao();
+
 		TestDao tDao = new TestDao();
 
-		/* 画面から送られた検索条件取得 */
+		/* パラメータ */
 		String subjectCd = req.getParameter("subjectCd");
+
 		String classNum = req.getParameter("classNum");
-		int no = Integer.parseInt(req.getParameter("no"));
-		int count = Integer.parseInt(req.getParameter("count"));
 
-		/* 科目情報取得 */
-		Subject subject = sDao.getSchool(subjectCd, school);
+		int entYear = Integer.parseInt(
+				req.getParameter("entYear"));
 
-		/* 保存用リスト */
-		List<Test> saveList = new ArrayList<>();
+		int no = Integer.parseInt(
+				req.getParameter("no"));
 
-		/* 学生ごとのエラー管理 */
+		int count = Integer.parseInt(
+				req.getParameter("count"));
+
+		/* 科目取得 */
+		Subject subject = sDao.getSchool(
+				subjectCd,
+				school);
+
+		/* DBから一覧取得 */
+		List<Test> tests = tDao.filter(
+				entYear,
+				classNum,
+				subject,
+				no,
+				school);
+
+		/* エラー管理 */
 		Map<String, String> errorMap = new HashMap<>();
 
-		/* 学生人数分ループ */
+		/* 入力値反映 */
 		for (int i = 0; i < count; i++) {
 
-			/* 学籍番号取得 */
-			String studentNo = req.getParameter("studentNo_" + i);
+			/* 学生番号 */
+			String studentNo = req.getParameter(
+					"studentNo_" + i);
 
-			/* 点数取得 */
-			String pointStr = req.getParameter("point_" + i);
+			/* 点数 */
+			String pointStr = req.getParameter(
+					"point_" + i);
 
-			int point = 0;
+			/* 対象学生検索 */
+			for (Test test : tests) {
 
-			/* 点数が入力されている場合 */
-			if (pointStr != null && !pointStr.isEmpty()) {
+				if (test.getStudent()
+						.getNo()
+						.equals(studentNo)) {
 
-				point = Integer.parseInt(pointStr);
+					/* 未入力 */
+					if (pointStr == null ||
+							pointStr.isEmpty()) {
 
-				/* 0～100以外ならエラー */
-				if (point < 0 || point > 100) {
+						test.setPoint(null);
+						break;
+					}
 
-					errorMap.put(
-							studentNo,
-							"0～100の範囲で入力してください。");
+					try {
+
+						int point = Integer.parseInt(pointStr);
+
+						/* 範囲チェック */
+						if (point < 0 ||
+								point > 100) {
+
+							errorMap.put(
+									studentNo,
+									"0～100の範囲で入力してください");
+
+						} else {
+
+							/* 正常値のみ反映 */
+							test.setPoint(point);
+						}
+
+					} catch (NumberFormatException e) {
+
+						errorMap.put(
+								studentNo,
+								"数字で入力してください");
+					}
+
+					break;
 				}
 			}
-
-			/* Studentオブジェクト作成 */
-			Student student = new Student();
-			student.setNo(studentNo);
-
-			/* Testオブジェクト作成 */
-			Test test = new Test();
-			test.setStudent(student);
-			test.setClassNum(classNum);
-			test.setSubject(subject);
-			test.setSchool(school);
-			test.setNo(no);
-			test.setPoint(point);
-
-			/* 保存リストへ追加 */
-			saveList.add(test);
 		}
 
-		/* エラーがある場合 */
+		/* エラー */
 		if (!errorMap.isEmpty()) {
 
-			/* エラーメッセージ保存 */
-			req.setAttribute("errorMap", errorMap);
+			req.setAttribute(
+					"errorMap",
+					errorMap);
 
-			/* 検索条件保持 */
-			req.setAttribute("entYear",
-					req.getParameter("entYear"));
-			req.setAttribute("classNum", classNum);
-			req.setAttribute("subjectCd", subjectCd);
-			req.setAttribute("no", no);
+			req.setAttribute(
+					"tests",
+					tests);
 
-			/* 入力画面へ戻る */
-			req.getRequestDispatcher("TestRegist.action")
+			req.setAttribute(
+					"entYear",
+					entYear);
+
+			req.setAttribute(
+					"classNum",
+					classNum);
+
+			req.setAttribute(
+					"subjectCd",
+					subjectCd);
+
+			req.setAttribute(
+					"subjectName",
+					subject.getName());
+
+			req.setAttribute(
+					"no",
+					no);
+
+			req.getRequestDispatcher(
+					"test_regist.jsp")
 					.forward(req, res);
+
 			return;
 		}
 
-		/* DB保存 */
-		tDao.save(saveList);
+		/* 保存 */
+		tDao.save(tests);
 
-		/* 完了画面へ */
-		req.getRequestDispatcher("test_regist_done.jsp")
+		/* 完了画面 */
+		req.getRequestDispatcher(
+				"test_regist_done.jsp")
 				.forward(req, res);
 	}
 }

@@ -1,3 +1,4 @@
+// TestRegistAction.java
 package scoremanager.main;
 
 import java.time.LocalDate;
@@ -20,7 +21,9 @@ import tool.Action;
 public class TestRegistAction extends Action {
 
 	@Override
-	public void execute(HttpServletRequest req, HttpServletResponse res)
+	public void execute(
+			HttpServletRequest req,
+			HttpServletResponse res)
 			throws Exception {
 
 		/* ログイン中先生取得 */
@@ -29,7 +32,9 @@ public class TestRegistAction extends Action {
 
 		/* DAO */
 		ClassNumDao cDao = new ClassNumDao();
+
 		SubjectDao sDao = new SubjectDao();
+
 		TestDao tDao = new TestDao();
 
 		/* 年取得 */
@@ -71,31 +76,35 @@ public class TestRegistAction extends Action {
 						teacher.getSchool()));
 
 		/* 検索条件取得 */
-		String entYearStr = req.getParameter("entYear");
+		String entYearStr = req.getParameter("f1");
 
-		String classNum = req.getParameter("classNum");
+		String classNum = req.getParameter("f2");
 
-		String subjectCd = req.getParameter("subjectCd");
+		String subjectCd = req.getParameter("f3");
 
-		String noStr = req.getParameter("no");
+		String noStr = req.getParameter("f4");
 
 		/* forward値優先 */
 		if (req.getAttribute("entYear") != null) {
+
 			entYearStr = req.getAttribute("entYear")
 					.toString();
 		}
 
 		if (req.getAttribute("classNum") != null) {
+
 			classNum = req.getAttribute("classNum")
 					.toString();
 		}
 
 		if (req.getAttribute("subjectCd") != null) {
+
 			subjectCd = req.getAttribute("subjectCd")
 					.toString();
 		}
 
 		if (req.getAttribute("no") != null) {
+
 			noStr = req.getAttribute("no")
 					.toString();
 		}
@@ -120,9 +129,11 @@ public class TestRegistAction extends Action {
 				!subjectCd.equals("0") &&
 				!noStr.equals("0")) {
 
-			int entYear = Integer.parseInt(entYearStr);
+			int entYear = Integer.parseInt(
+					entYearStr);
 
-			int no = Integer.parseInt(noStr);
+			int no = Integer.parseInt(
+					noStr);
 
 			/* 科目 */
 			Subject subject = sDao.getSchool(

@@ -1,3 +1,4 @@
+// TestRegistExecuteAction.java
 package scoremanager.main;
 
 import java.util.HashMap;
@@ -38,17 +39,14 @@ public class TestRegistExecuteAction extends Action {
 		TestDao tDao = new TestDao();
 
 		/* パラメータ */
-		String subjectCd = req.getParameter("subjectCd");
+		String subjectCd = req.getParameter("subject");
 
-		String classNum = req.getParameter("classNum");
+		String classNum = req.getParameter("f2");
 
 		int entYear = Integer.parseInt(
-				req.getParameter("entYear"));
+				req.getParameter("f1"));
 
 		int no = Integer.parseInt(
-				req.getParameter("no"));
-
-		int count = Integer.parseInt(
 				req.getParameter("count"));
 
 		/* 科目取得 */
@@ -67,18 +65,15 @@ public class TestRegistExecuteAction extends Action {
 		/* エラー管理 */
 		Map<String, String> errorMap = new HashMap<>();
 
-		/* 入力値反映 */
-		for (int i = 0; i < count; i++) {
+		/* 学生番号配列取得 */
+		String[] registList = req.getParameterValues("regist");
 
-			/* 学生番号 */
-			String studentNo = req.getParameter(
-					"studentNo_" + i);
+		/* 入力チェック */
+		for (String studentNo : registList) {
 
-			/* 点数 */
 			String pointStr = req.getParameter(
-					"point_" + i);
+					"point_" + studentNo);
 
-			/* 対象学生検索 */
 			for (Test test : tests) {
 
 				if (test.getStudent()
@@ -90,32 +85,33 @@ public class TestRegistExecuteAction extends Action {
 							pointStr.isEmpty()) {
 
 						test.setPoint(null);
-						break;
-					}
 
-					try {
+					} else {
 
-						int point = Integer.parseInt(pointStr);
+						try {
 
-						/* 範囲チェック */
-						if (point < 0 ||
-								point > 100) {
+							int point = Integer.parseInt(
+									pointStr);
+
+							/* 範囲チェック */
+							if (point < 0 ||
+									point > 100) {
+
+								errorMap.put(
+										studentNo,
+										"0～100の範囲で入力してください");
+
+							} else {
+
+								test.setPoint(point);
+							}
+
+						} catch (NumberFormatException e) {
 
 							errorMap.put(
 									studentNo,
-									"0～100の範囲で入力してください");
-
-						} else {
-
-							/* 正常値のみ反映 */
-							test.setPoint(point);
+									"数字で入力してください");
 						}
-
-					} catch (NumberFormatException e) {
-
-						errorMap.put(
-								studentNo,
-								"数字で入力してください");
 					}
 
 					break;

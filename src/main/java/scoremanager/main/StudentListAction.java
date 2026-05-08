@@ -112,7 +112,7 @@ public class StudentListAction extends Action {
 
 			// クラスのみ指定はエラー
 			errors.put(
-					"f",
+					"f1",
 					"クラスを指定する場合は入学年度も指定してください");
 
 			request.setAttribute(

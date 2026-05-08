@@ -33,10 +33,11 @@
 
 					<%-- 確認メッセージ --%>
 					<div class="col-md-12 mb-3">
-						<p>「${subject.name}(${subject.cd})を削除してもよろしいでしょうか」 
-						</p>
-						<input type="hidden" name="cd" value="${subject.cd}">
-						<input type="hidden" name="name" value="${subject.name}" >
+					    <p style="color: red;">
+					        「${subject.name}(${subject.cd})を削除してもよろしいでしょうか」
+					    </p>
+					    <input type="hidden" name="cd" value="${subject.cd}">
+					    <input type="hidden" name="name" value="${subject.name}">
 					</div>
 						
 					<%-- 削除ボタン --%>

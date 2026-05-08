@@ -22,7 +22,7 @@
 
 			<%-- 見出し --%>
 			<h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">
-				科目変更
+				科目情報変更
 			</h2>
 
 			<%-- 更新フォーム --%>

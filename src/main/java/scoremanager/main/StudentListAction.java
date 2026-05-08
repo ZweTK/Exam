@@ -54,7 +54,7 @@ public class StudentListAction extends Action {
 		// エラーメッセージ格納
 		Map<String, String> errors = new HashMap<>();
 
-		// リクエストパラメータ取得
+		// リクエストパラメdータ取得
 		entYearStr = request.getParameter("f1");
 		classNum = request.getParameter("f2");
 		isAttendStr = request.getParameter("f3");

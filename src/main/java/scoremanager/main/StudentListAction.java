@@ -60,8 +60,13 @@ public class StudentListAction extends Action {
 		isAttendStr = request.getParameter("f3");
 
 		// 入学年度変換
-		if (entYearStr != null) {
+		if (entYearStr != null && !entYearStr.isEmpty()) {
 			entYear = Integer.parseInt(entYearStr);
+		}
+
+		// 在学中チェック
+		if (isAttendStr != null) {
+			isAttend = true;
 		}
 
 		/*
@@ -80,6 +85,7 @@ public class StudentListAction extends Action {
 		 * 検索条件によって処理分岐
 		 */
 		if (entYear != 0 &&
+				classNum != null &&
 				!classNum.equals("0")) {
 
 			// 年度＋クラス指定
@@ -90,7 +96,7 @@ public class StudentListAction extends Action {
 					isAttend);
 
 		} else if (entYear != 0 &&
-				classNum.equals("0")) {
+				(classNum == null || classNum.equals("0"))) {
 
 			// 年度のみ指定
 			students = sDao.filter(
@@ -99,9 +105,7 @@ public class StudentListAction extends Action {
 					isAttend);
 
 		} else if (entYear == 0 &&
-				classNum == null
-				|| entYear == 0 &&
-						classNum.equals("0")) {
+				(classNum == null || classNum.equals("0"))) {
 
 			// 条件なし
 			students = sDao.filter(
@@ -128,12 +132,8 @@ public class StudentListAction extends Action {
 		request.setAttribute("f1", entYear);
 		request.setAttribute("f2", classNum);
 
-		// 在学中チェック
 		if (isAttendStr != null) {
-			isAttend = true;
-			request.setAttribute(
-					"f3",
-					isAttendStr);
+			request.setAttribute("f3", isAttendStr);
 		}
 
 		// JSPへ送信

@@ -280,7 +280,7 @@
 								<td>
 
 									${empty row.points[i]
-										? ""
+										? "-"
 										: row.points[i]}
 
 								</td>

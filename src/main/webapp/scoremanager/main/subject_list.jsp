@@ -57,18 +57,40 @@
 							${subject.name}
 						</td>
 
+						<%-- 変更URL生成 --%>
+						<c:url var="updateUrl"
+							value="SubjectUpdate.action">
+
+							<c:param name="cd"
+								value="${subject.cd}" />
+
+						</c:url>
+
 						<%-- 変更リンク --%>
 						<td>
-							<a href="SubjectUpdate.action?cd=${subject.cd}">
+
+							<a href="${updateUrl}">
 								変更
 							</a>
+
 						</td>
+
+						<%-- 削除URL生成 --%>
+						<c:url var="deleteUrl"
+							value="SubjectDelete.action">
+
+							<c:param name="cd"
+								value="${subject.cd}" />
+
+						</c:url>
 
 						<%-- 削除リンク --%>
 						<td>
-							<a href="SubjectDelete.action?cd=${subject.cd}">
+
+							<a href="${deleteUrl}">
 								削除
 							</a>
+
 						</td>
 
 					</tr>

@@ -32,7 +32,7 @@
 				<div class="row mb-3">
 
 					<%-- 科目コード --%>
-					<div class="col-6">
+					<div class="col-12">
 
 						<label class="form-label"
 							   for="subject-cd">
@@ -45,7 +45,7 @@
 							   id="subject-cd"
 							   name="cd"
 							   maxlength="10"
-							   value="${cd}" />
+							   placeholder="科目コードを入力してください">
 
 						<div class="text-warning mt-1">
 							${errors.get("cd")}
@@ -58,7 +58,7 @@
 				<div class="row mb-4">
 
 					<%-- 科目名 --%>
-					<div class="col-6">
+					<div class="col-12">
 
 						<label class="form-label"
 							   for="subject-name">
@@ -71,7 +71,7 @@
 							   id="subject-name"
 							   name="name"
 							   maxlength="30"
-							   value="${name}"
+							   placeholder="科目名を入力してください"
 							   required />
 
 					</div>

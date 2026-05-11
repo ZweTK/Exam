@@ -18,7 +18,7 @@ public class SubjectDeleteAction extends Action {
 		HttpSession session = request.getSession();
 		Teacher teacher = (Teacher) session.getAttribute("user");
 
-		// 未ログイン時はログイン画面へ
+		// 未ログイン時
 		if (teacher == null) {
 			response.sendRedirect("../login.jsp");
 			return;
@@ -30,14 +30,19 @@ public class SubjectDeleteAction extends Action {
 		// DAO
 		SubjectDao dao = new SubjectDao();
 
-		// 科目の詳細データを取得
-		Subject subject = dao.get(cd);
+		// 学校情報込みで科目取得
+		Subject subject = dao.getSchool(cd, teacher.getSchool());
+
+		// データが存在しない場合
+		if (subject == null) {
+			request.setAttribute("error", "科目情報が存在しませんでした");
+		}
+
 		// JSPへ送る
 		request.setAttribute("subject", subject);
 
 		// 画面表示
 		request.getRequestDispatcher("subject_delete.jsp")
 				.forward(request, response);
-
 	}
 }

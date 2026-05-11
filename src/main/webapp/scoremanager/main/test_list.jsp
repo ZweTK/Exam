@@ -22,7 +22,7 @@
 
 			<%-- 見出し --%>
 			<h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">
-				成績参照
+				成績一覧（学生）
 			</h2>
 
 			<div class="px-4 mt-3">

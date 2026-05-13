@@ -43,7 +43,13 @@
 				<input type="text"
 					   name="new_class_num"
 					   class="form-control"
+					   value="${new_class_num}"
 					   required>
+				<c:if test="${not empty error}">
+					<div class="text-danger">
+						${error}
+					</div>
+				</c:if>
 
 			</div>
 

@@ -207,7 +207,7 @@
 							   value="${subjectCd}" />
 
 						<input type="hidden"
-							   name="count"
+							   name="f4"
 							   value="${no}" />
 
 						<table class="table table-hover mx-3">

@@ -161,7 +161,7 @@
 							<span style="color:#d6a100;
 										 font-weight:bold;">
 
-								⚠ ${error.value}
+								${error.value}
 
 							</span>
 

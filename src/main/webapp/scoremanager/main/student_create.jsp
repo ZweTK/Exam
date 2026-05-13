@@ -114,10 +114,6 @@
 						<select name="class_num"
 								class="form-select">
 								
-							<option value="0">
-								--------
-							</option>
-
 							<c:forEach var="num"
 								items="${class_num_set}">
 

@@ -8,10 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import tool.Action;
 
-/*
- * クラス新規登録実行Action
- * 入力されたクラス番号をDBへ登録する
- */
 public class ClassCreateExecuteAction extends Action {
 
 	@Override
@@ -19,31 +15,44 @@ public class ClassCreateExecuteAction extends Action {
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		// セッション取得
 		HttpSession session = request.getSession();
 
-		// ログイン教師取得
 		Teacher teacher = (Teacher) session.getAttribute("user");
 
-		// 未ログイン時
 		if (teacher == null) {
 			response.sendRedirect("../login.jsp");
 			return;
 		}
 
-		// 入力値取得
+		// 入力値
 		String classNum = request.getParameter("class_num");
 
-		// Bean作成
+		ClassNumDao dao = new ClassNumDao();
+
+		// 既存チェック
+		ClassNum exist = dao.get(classNum, teacher.getSchool());
+
+		// 既に存在
+		if (exist != null) {
+
+			request.setAttribute("error", "クラスが存在しています");
+
+			request.setAttribute("class_num", classNum);
+
+			request.getRequestDispatcher("classcreate.jsp")
+					.forward(request, response);
+
+			return;
+		}
+
+		// 登録Bean
 		ClassNum c = new ClassNum();
 		c.setClass_num(classNum);
 		c.setSchool(teacher.getSchool());
 
-		// 登録処理
-		ClassNumDao dao = new ClassNumDao();
+		// 登録
 		dao.save(c);
 
-		// 一覧へ戻る
 		response.sendRedirect("ClassList.action");
 	}
 }

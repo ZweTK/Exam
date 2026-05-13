@@ -45,7 +45,7 @@
 							   id="subject-cd"
 							   name="cd"
 							   maxlength="10"
-							   
+
 							   placeholder="科目コードを入力してください">
 
 						<div class="text-warning mt-1">
@@ -72,6 +72,7 @@
 							   id="subject-name"
 							   name="name"
 							   maxlength="30"
+							   value="${name}"
 							   placeholder="科目名を入力してください"
 							   required />
 

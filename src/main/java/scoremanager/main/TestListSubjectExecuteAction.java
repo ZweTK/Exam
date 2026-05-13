@@ -118,7 +118,7 @@ public class TestListSubjectExecuteAction extends Action {
 		// 画面保持値
 		req.setAttribute(
 				"f1",
-				entYear);
+				entYearStr);
 
 		req.setAttribute(
 				"f2",
@@ -126,7 +126,7 @@ public class TestListSubjectExecuteAction extends Action {
 
 		req.setAttribute(
 				"f3",
-				subject);
+				subjectCd);
 
 		// JSPへ渡す
 		req.setAttribute(

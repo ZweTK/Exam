@@ -115,7 +115,9 @@ public class StudentDao extends DAO {
 		String conditionIsAttend = "";
 
 		if (isAttend) {
-			conditionIsAttend = " and is_attend=true";
+		    conditionIsAttend = " and is_attend=true";
+		} else {
+		    conditionIsAttend = " and is_attend=false";
 		}
 
 		try {
@@ -158,7 +160,9 @@ public class StudentDao extends DAO {
 		String conditionIsAttend = "";
 
 		if (isAttend) {
-			conditionIsAttend = " and is_attend=true";
+		    conditionIsAttend = " and is_attend=true";
+		} else {
+		    conditionIsAttend = " and is_attend=false";
 		}
 
 		try {
@@ -181,6 +185,27 @@ public class StudentDao extends DAO {
 
 		return list;
 	}
+	
+	// 全件取得（条件なし）
+	public List<Student> filterAll(School school) throws Exception {
+
+	    List<Student> list = new ArrayList<>();
+	    Connection connection = getConnection();
+	    PreparedStatement statement = null;
+	    String order = " order by no asc";
+
+	    try {
+	        statement = connection.prepareStatement(baseSql + order);
+	        statement.setString(1, school.getCd());
+	        ResultSet rSet = statement.executeQuery();
+	        list = postFilter(rSet, school);
+	    } finally {
+	        if (statement != null) statement.close();
+	        if (connection != null) connection.close();
+	    }
+
+	    return list;
+	}
 
 	/*
 	 * 学校・在学条件で検索
@@ -198,7 +223,9 @@ public class StudentDao extends DAO {
 		String conditionIsAttend = "";
 
 		if (isAttend) {
-			conditionIsAttend = " and is_attend=true";
+		    conditionIsAttend = " and is_attend=true";
+		} else {
+		    conditionIsAttend = " and is_attend=false";
 		}
 
 		try {

@@ -47,7 +47,7 @@ public class TestRegistExecuteAction extends Action {
 				req.getParameter("f1"));
 
 		int no = Integer.parseInt(
-				req.getParameter("count"));
+				req.getParameter("f4"));
 
 		/* 科目取得 */
 		Subject subject = sDao.getSchool(
@@ -61,6 +61,12 @@ public class TestRegistExecuteAction extends Action {
 				subject,
 				no,
 				school);
+
+		/* IMPORTANT */
+		for (Test test : tests) {
+
+			test.setNo(no);
+		}
 
 		/* エラー管理 */
 		Map<String, String> errorMap = new HashMap<>();

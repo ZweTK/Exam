@@ -1,3 +1,4 @@
+// TestDao.java
 package dao;
 
 import java.sql.Connection;
@@ -42,8 +43,26 @@ public class TestDao extends DAO {
 			test.setClassNum(rs.getString("class_num"));
 			test.setSubject(subject);
 			test.setSchool(school);
-			test.setNo(rs.getInt("test_no"));
-			test.setPoint(rs.getInt("point"));
+
+			int testNo = rs.getInt("test_no");
+
+			if (rs.wasNull()) {
+
+				testNo = 0;
+			}
+
+			test.setNo(testNo);
+
+			int point = rs.getInt("point");
+
+			if (rs.wasNull()) {
+
+				test.setPoint(null);
+
+			} else {
+
+				test.setPoint(point);
+			}
 
 			list.add(test);
 		}
@@ -124,7 +143,7 @@ public class TestDao extends DAO {
 
 		String sql = "MERGE INTO test " +
 				"(student_no, subject_cd, school_cd, no, class_num, point) " +
-				"KEY(student_no, subject_cd, school_cd, no) " +
+				"KEY(student_no, subject_cd, school_cd, no, class_num) " +
 				"VALUES (?, ?, ?, ?, ?, ?)";
 
 		PreparedStatement st = con.prepareStatement(sql);
@@ -134,7 +153,15 @@ public class TestDao extends DAO {
 		st.setString(3, test.getSchool().getCd());
 		st.setInt(4, test.getNo());
 		st.setString(5, test.getClassNum());
-		st.setInt(6, test.getPoint());
+
+		if (test.getPoint() == null) {
+
+			st.setNull(6, java.sql.Types.INTEGER);
+
+		} else {
+
+			st.setInt(6, test.getPoint());
+		}
 
 		int count = st.executeUpdate();
 
@@ -157,20 +184,28 @@ public class TestDao extends DAO {
 			con.setAutoCommit(false);
 
 			for (Test test : list) {
+
 				if (!save(test, con)) {
+
 					result = false;
+
 					break;
 				}
 			}
 
 			if (result) {
+
 				con.commit();
+
 			} else {
+
 				con.rollback();
 			}
 
 		} catch (Exception e) {
+
 			con.rollback();
+
 			throw e;
 		}
 

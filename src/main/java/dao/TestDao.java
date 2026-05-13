@@ -154,18 +154,18 @@ public class TestDao extends DAO {
 		st.setInt(4, test.getNo());
 		st.setString(5, test.getClassNum());
 
+		int count = 0;
 		if (test.getPoint() == null) {
 
-			st.setNull(6, java.sql.Types.INTEGER);
+			st.close();
 
 		} else {
 
 			st.setInt(6, test.getPoint());
+			count = st.executeUpdate();
+			st.close();
+
 		}
-
-		int count = st.executeUpdate();
-
-		st.close();
 
 		return count > 0;
 	}
@@ -185,12 +185,7 @@ public class TestDao extends DAO {
 
 			for (Test test : list) {
 
-				if (!save(test, con)) {
-
-					result = false;
-
-					break;
-				}
+				save(test, con);
 			}
 
 			if (result) {

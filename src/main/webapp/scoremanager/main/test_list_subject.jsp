@@ -123,7 +123,7 @@
 											   items="${subject_set}">
 
 										<option value="${sub.cd}"
-											<c:if test="${sub.cd==f3.cd}">
+											<c:if test="${sub.cd==f3}">
 												selected
 											</c:if>>
 

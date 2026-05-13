@@ -64,7 +64,6 @@ public class TestListAction extends Action{
 		req.getRequestDispatcher(
 				"test_list.jsp")
 				.forward(req, res);
-		
 
 	}
 }

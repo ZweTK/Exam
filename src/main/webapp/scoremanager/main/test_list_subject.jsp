@@ -236,7 +236,7 @@
 				<!-- 科目名 -->
 				<div class="px-4 mt-3 mb-2">
 
-					科目：${f3.name}
+					科目：${subject.name}
 
 				</div>
 

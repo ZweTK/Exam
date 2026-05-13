@@ -127,6 +127,7 @@ public class TestListSubjectExecuteAction extends Action {
 		req.setAttribute(
 				"f3",
 				subjectCd);
+		req.setAttribute("subject", subject);
 
 		// JSPへ渡す
 		req.setAttribute(

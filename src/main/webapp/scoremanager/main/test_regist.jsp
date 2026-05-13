@@ -240,7 +240,7 @@
 											   name="point_${row.student.no}"
 											   value="${row.point}"
 											   class="form-control"
-											   style="width:150px;">
+											   style="width:200px;">
 
 										<c:if test="${not empty errorMap[row.student.no]}">
 

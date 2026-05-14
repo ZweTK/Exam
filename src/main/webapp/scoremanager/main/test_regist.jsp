@@ -18,7 +18,7 @@
 		<section class="me-4">
 
 			<h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">
-				成績管理一覧
+				成績管理
 			</h2>
 
 			<div class="px-4 mt-3">

@@ -50,6 +50,11 @@ public class StudentListAction extends Action {
 		isAttendStr = request.getParameter("f3");
 		// 入学年度変換
 		boolean isFiltered = (entYearStr != null);
+		if (entYearStr != null &&
+				!entYearStr.equals("0") &&
+				!entYearStr.isEmpty()) {
+			entYear = Integer.parseInt(entYearStr);
+		}
 
 		// 在学中チェック
 		if (isFiltered) {

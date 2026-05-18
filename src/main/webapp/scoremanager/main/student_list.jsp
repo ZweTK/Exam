@@ -167,6 +167,7 @@
 							<th>クラス</th>
 							<th class="text-center">在学中</th>
 							<th></th>
+							<th></th>
 						</tr>
 
 						<c:forEach var="student"
@@ -203,6 +204,13 @@
 										変更
 									</a>
 
+								</td>
+								<%--プロファイル --%>
+								<td>
+									<a href="StudentProfile.action?no=${student.no}"
+									   class="btn btn-sm btn-outline-primary py-0 ms-2">
+										プロフィール
+									</a>
 								</td>
 
 							</tr>

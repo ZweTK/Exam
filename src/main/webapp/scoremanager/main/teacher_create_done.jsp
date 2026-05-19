@@ -46,7 +46,7 @@
 					<%-- 学生一覧画面へ移動 --%>
 					<th style="text-align:center">
 						<div class="mx-3">
-							<a href="StudentList.action">学生一覧</a>
+							<a href="TeacherList.action">先生一覧</a>
 						</div>
 					</th>
 

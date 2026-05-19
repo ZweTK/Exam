@@ -111,6 +111,14 @@
 				</div>
 
 				<% } %>
+				
+				<div class="col d-flex align-items-center justify-content-center mx-2 rounded shadow"
+					style="height: 10rem; background-color: #bed">
+
+					<a href="SeatChange.action">
+						座席切り替え
+					</a>
+				</div>
 
 			</div>
 

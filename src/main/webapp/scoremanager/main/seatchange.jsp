@@ -23,32 +23,42 @@
             <h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">
                 座席切り替え
             </h2>
-			<div class="d-flex align-items-center mb-3">
-			
-			    <label class="me-2 fw-bold">
-			        クラス :
-			    </label>
-			
-			    <select name="class_num"
-			            class="form-select w-auto">
-			
-			        <c:forEach var="num"
-			                   items="${class_num_set}">
-			
-			            <option value="${num}"
-			                <c:if test="${num == class_num}">
-			                    selected
-			                </c:if>>
-			
-			                ${num}
-			
-			            </option>
-			
-			        </c:forEach>
-			
-			    </select>
-			
-			</div>
+			<div class="d-flex justify-content-between align-items-center mb-3">
+
+		    <!-- Left side -->
+		    <div class="d-flex align-items-center">
+		
+		        <label class="me-2 fw-bold">
+		            クラス :
+		        </label>
+		
+		        <select name="class_num"
+		                class="form-select w-auto">
+		
+		            <c:forEach var="num"
+		                       items="${class_num_set}">
+		
+		                <option value="${num}"
+		                    <c:if test="${num == class_num}">
+		                        selected
+		                    </c:if>>
+		                    ${num}
+		                </option>
+		
+		            </c:forEach>
+		
+		        </select>
+		
+		    </div>
+		
+		    <!-- Right side -->
+		    <button type="button"
+		            class="btn btn-outline-secondary"
+		            onclick="window.print()">
+		        印刷
+		    </button>
+		
+		</div>
 
             <%-- クラス表示 --%>
             <style>
@@ -61,10 +71,53 @@
 				    text-align:center;
 				    vertical-align:middle;
 				}
+				@media print {
+				
+				    body *{
+				        visibility:hidden;
+				    }
+				
+				    .print-area,
+				    .print-area *{
+				        visibility:visible;
+				    }
+				
+				    .print-area{
+				        position:absolute;
+				        top:0;
+				        left:0;
+				        width:auto;
+				        margin:0 auto;
+				    }
+				
+				    .seat-table{
+				        table-layout:fixed;
+				        border-collapse:collapse;
+				        margin:auto;
+				    }
+				
+				    .seat-table tr{
+				        height:80px;
+				    }
+				
+				    .seat-table td,
+				    .seat-table th{
+				        text-align:center;
+				        vertical-align:middle;
+				        min-width:70px;
+				        padding:4px;
+				    }
+				
+				    @page{
+				        size:landscape;
+				        margin:5mm;
+				    }
+				
+				}
 			</style>
 
             <%-- 座席表 --%>
-            <div class="mx-4">
+            <div class="mx-4 print-area" >
 
 			<table class="w-100 seat-table"
        				style="table-layout:fixed;">

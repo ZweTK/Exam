@@ -12,5 +12,8 @@
 	<li class="nav-item mx-3 mb-3"><a href="TestList.action">成績参照</a></li>
 	<li class="nav-item mb-3"><a href="SubjectList.action">科目管理</a></li>
 	<li class="nav-item mb-3"><a href="ClassList.action">クラス管理</a></li>
+	<li class="nav-item">出欠管理</li>
+	<li class="nav-item mx-3 mb-3"><a href="AttendSet.action">出欠登録</a></li>
+	<li class="nav-item mx-3 mb-3"><a href="AttendList.action">出欠参照</a></li>
 	<li class="nav-item mb-3"><a href="SeatChange.action">座席切り替え</a></li>
 </ul>

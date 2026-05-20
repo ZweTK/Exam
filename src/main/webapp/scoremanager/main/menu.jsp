@@ -98,6 +98,30 @@
 						CSVアップロード
 					</a>
 				</div>
+				
+				<%-- 出欠管理 --%>
+				<div class="col d-flex align-items-center justify-content-center mx-2 rounded shadow"
+					style="height: 10rem; background-color: #bed;">
+
+				<div>
+
+		<div>出欠管理</div>
+
+		<div>
+			<a href="AttendSet.action">
+				出欠登録
+			</a>
+		</div>
+
+		<div>
+			<a href="AttendList.action">
+				出欠参照
+			</a>
+		</div>
+
+	</div>
+
+</div>
 
 				<%-- 管理者のみ表示：先生管理 --%>
 				<% if (teacher != null && teacher.isManage()) { %>

@@ -8,7 +8,7 @@ public class DBUtil {
     public static Connection getConnection() throws Exception {
 
         // H2接続情報
-        String url = "jdbc:h2:tcp://localhost/~/test"; // ←DB名（必要なら変更）
+        String url = "jdbc:h2:tcp://localhost/~/exam"; // ←DB名（必要なら変更）
         String user = "sa";
         String password = "";
 

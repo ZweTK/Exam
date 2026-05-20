@@ -19,58 +19,39 @@ public class AttendSetAction extends Action {
             HttpServletResponse res)
             throws Exception {
 
-        HttpSession session =
-            req.getSession();
+        HttpSession session = req.getSession();
 
-        Teacher teacher =
-            (Teacher) session.getAttribute("user");
+        Teacher teacher = (Teacher) session.getAttribute("user");
 
         // クラス一覧
-        ClassNumDao cDao =
-            new ClassNumDao();
-
-        List<String> classList =
-            cDao.filter(
-                teacher.getSchool());
-
-        req.setAttribute(
-            "classList",
-            classList);
+        ClassNumDao cDao = new ClassNumDao();
+        List<String> classList = cDao.filter(teacher.getSchool());
+        req.setAttribute("classList", classList);
 
         // パラメータ
-        String classNum =
-            req.getParameter("class_num");
+        String classNum = req.getParameter("class_num");
+        String date = req.getParameter("date");
 
-        String date =
-            req.getParameter("date");
+        // ★★ 日付未入力チェック（検索時） ★★
+        if (classNum != null && !classNum.isEmpty()) {
 
-        // クラス選択時だけ学生取得
-        if (classNum != null &&
-            !classNum.isEmpty()) {
+            if (date == null || date.isEmpty()) {
+                req.setAttribute("error", "日付を入力してください");
+                req.getRequestDispatcher("attend_set.jsp").forward(req, res);
+                return;
+            }
 
-            StudentDao sDao =
-                new StudentDao();
-
+            // 学生取得
+            StudentDao sDao = new StudentDao();
             List<Student> students =
-                sDao.getClass(
-                    classNum,
-                    teacher.getSchool());
+                sDao.getClass(classNum, teacher.getSchool());
 
-            req.setAttribute(
-                "students",
-                students);
+            req.setAttribute("students", students);
         }
 
-        req.setAttribute(
-            "classNum",
-            classNum);
+        req.setAttribute("classNum", classNum);
+        req.setAttribute("date", date);
 
-        req.setAttribute(
-            "date",
-            date);
-
-        req.getRequestDispatcher(
-            "attend_set.jsp")
-            .forward(req, res);
+        req.getRequestDispatcher("attend_set.jsp").forward(req, res);
     }
 }

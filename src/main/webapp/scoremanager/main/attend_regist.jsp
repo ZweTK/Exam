@@ -127,6 +127,12 @@ py-2 px-4">
                                 遅刻
 
                             </option>
+                            
+                            <option value="早退">
+
+                                早退
+
+                            </option>
 
                         </select>
 

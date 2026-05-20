@@ -41,7 +41,7 @@ public class AttendExecuteAction extends Action {
             );
 
             req.getRequestDispatcher(
-                "attend_regist.jsp"
+                "attend_set.jsp"
             ).forward(req, res);
 
             return;
@@ -57,7 +57,7 @@ public class AttendExecuteAction extends Action {
             );
 
             req.getRequestDispatcher(
-                "attend_regist.jsp"
+                "attend_set.jsp"
             ).forward(req, res);
 
             return;

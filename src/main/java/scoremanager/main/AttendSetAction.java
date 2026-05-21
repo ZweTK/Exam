@@ -20,7 +20,6 @@ public class AttendSetAction extends Action {
             throws Exception {
 
         HttpSession session = req.getSession();
-
         Teacher teacher = (Teacher) session.getAttribute("user");
 
         // クラス一覧
@@ -32,16 +31,40 @@ public class AttendSetAction extends Action {
         String classNum = req.getParameter("class_num");
         String date = req.getParameter("date");
 
-        // ★★ 日付未入力チェック（検索時） ★★
-        if (classNum != null && !classNum.isEmpty()) {
+        // ★ 検索ボタンが押された（class_num が送られてきた）場合のみチェック
+        if (req.getParameter("class_num") != null) {
 
-            if (date == null || date.isEmpty()) {
-                req.setAttribute("error", "日付を入力してください");
+            boolean classEmpty = (classNum == null || classNum.isEmpty());
+            boolean dateEmpty = (date == null || date.isEmpty());
+
+            // ★ 両方未入力
+            if (classEmpty && dateEmpty) {
+                req.setAttribute("error", "クラスと日付を入力してください");
+                req.setAttribute("classNum", classNum);
+                req.setAttribute("date", date);
                 req.getRequestDispatcher("attend_set.jsp").forward(req, res);
                 return;
             }
 
-            // 学生取得
+            // ★ クラス未入力
+            if (classEmpty) {
+                req.setAttribute("error", "クラスを入力してください");
+                req.setAttribute("classNum", classNum);
+                req.setAttribute("date", date);
+                req.getRequestDispatcher("attend_set.jsp").forward(req, res);
+                return;
+            }
+
+            // ★ 日付未入力
+            if (dateEmpty) {
+                req.setAttribute("error", "日付を入力してください");
+                req.setAttribute("classNum", classNum);
+                req.setAttribute("date", date);
+                req.getRequestDispatcher("attend_set.jsp").forward(req, res);
+                return;
+            }
+
+            // ★ ここまで来たら両方入力済み → 学生取得
             StudentDao sDao = new StudentDao();
             List<Student> students =
                 sDao.getClass(classNum, teacher.getSchool());
